@@ -1,0 +1,80 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+ul,
+li {
+  list-style: none;
+}
+
+@mixin clearfix {
+  &::after {
+    clear: both;
+    display: block;
+    content: ""
+  }
+}
+
+@mixin prefix($property, $value, $prefixes: ()) {
+  @each $prefix in $prefixes {
+    -#{$prefix}-#{$property}: $value;
+  }
+
+  #{$property}: $value;
+}
+
+@mixin size($width, $height: $width) {
+  width: $width;
+  height: $height;
+}
+
+.App {
+  text-align: center;
+  width: 100%;
+  max-width: 1200px;
+  margin: 100px auto;
+}
+
+.note {
+  @include size(30px);
+  @include prefix(transition, 200ms, ('moz', 'ms','webkit'));
+  border: 1px solid #000;
+  border-radius: 3px;
+  &.active {
+    background-color:#f00 !important;
+  }
+}
+
+.player {
+  .sample {
+    @include clearfix;
+
+    button {
+      @include size(30px);
+      display: block;
+      float: left;
+      border: 1px solid #000;
+      margin: 1px;
+      border-radius: 3px;
+    }
+
+    ul {
+      @include clearfix;
+
+      display:block;
+      float:left;
+
+      li {
+        float: left;
+        margin: 1px;
+      }
+    }
+  }
+}
+
+.bpmBar {
+  position: absolute;
+  left:0;
+  @include prefix(transition, 200ms, ('moz', 'ms',));
+}
