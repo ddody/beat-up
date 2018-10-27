@@ -1,0 +1,9 @@
+export const SET_NOTE_INDEX = 'SET_NOTE_INDEX';
+export const ON_NOTE_CHANGE = 'ON_NOTE_CHANGE';
+export const SET_BEAT_BPM = 'SET_BEAT_BPM';
+export const ON_BEAT_INIT = 'ON_BEAT_INIT';
+export const ON_BEAT_STATE = 'ON_BEAT_STATE';
+export const ADD_BEAT_LIST = 'ADD_BEAT_LIST';
+export const ON_BEAT_LIST_SHOW = 'ON_BEAT_LIST_SHOW';
+export const ON_SELECT_BEAT_LINE = 'ON_SELECT_BEAT_LINE';
+export const ON_CHANGE_BEAT_LINE = 'ON_CHANGE_BEAT_LINE';

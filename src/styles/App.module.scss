@@ -1,80 +1,139 @@
 * {
-  margin: 0;
-  padding: 0;
+    margin: 0;
+    padding: 0;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -o-user-select: none;
+}
+
+body {
+    font-size: 16px;
 }
 
 ul,
 li {
-  list-style: none;
+    list-style: none;
 }
 
+$note-green: #0dc75b;
+$note-red: #ff054a;
+$note-orange: #ff7317;
+$note-yellow: #f5b916;
+$note-skyblue: #1acbf7;
+$note-pulple: #4f388f;
+$s-min: 20;
+$s-max: 70;
+$l-min: 30;
+$l-max: 90;
 @mixin clearfix {
-  &::after {
-    clear: both;
-    display: block;
-    content: ""
-  }
+    &::after {
+        clear: both;
+        display: block;
+        content: ""
+    }
 }
 
 @mixin prefix($property, $value, $prefixes: ()) {
-  @each $prefix in $prefixes {
-    -#{$prefix}-#{$property}: $value;
-  }
-
-  #{$property}: $value;
+    @each $prefix in $prefixes {
+        -#{$prefix}-#{$property}: $value;
+    }
+    #{$property}: $value;
 }
 
 @mixin size($width, $height: $width) {
-  width: $width;
-  height: $height;
+    width: $width;
+    height: $height;
+}
+
+@mixin note-active($color) {
+    background-color: $color;
+    &.on {
+        background-color: darken($color, 20%);
+    }
 }
 
 .App {
-  text-align: center;
-  width: 100%;
-  max-width: 1200px;
-  margin: 100px auto;
+    text-align: center;
+    width: 100%;
+    max-width: 1200px;
+    margin: 100px auto;
 }
 
 .note {
-  @include size(30px);
-  @include prefix(transition, 200ms, ('moz', 'ms','webkit'));
-  border: 1px solid #000;
-  border-radius: 3px;
-  &.active {
-    background-color:#f00 !important;
-  }
+    @include prefix(transition, 200ms, ('moz', 'ms', 'webkit'));
+    border-radius: 3px;
+    background-color: #e0e0e0;
+    &:nth-child(4n - 3) {
+        background-color: #d0d0d0;
+        border-left: 2px solid #868686;
+    }
+    &.active {
+        &.on {
+            @include prefix(transform, matrix3d(1.4, -0.77, 0.34, 0, 0.77, 1.4, 0.34, -0.001, -0.34, -0.34, 0.9, 0, 2, 2, 4, 1), ('moz', 'ms', 'webkit'));
+        }
+    }
+    &.on {
+        background-color: #757575;
+    }
 }
 
 .player {
-  .sample {
-    @include clearfix;
-
-    button {
-      @include size(30px);
-      display: block;
-      float: left;
-      border: 1px solid #000;
-      margin: 1px;
-      border-radius: 3px;
+    @for $i from 1 through 30 {
+        .sample:nth-child(#{$i}) {
+            ul {
+                li.active {
+                    background-color: hsl(random(360), $s-min+random($s-max+-$s-min), $l-min+random($l-max+-$l-min));
+                }
+            }
+        }
     }
-
-    ul {
-      @include clearfix;
-
-      display:block;
-      float:left;
-
-      li {
-        float: left;
-        margin: 1px;
-      }
+    .sample {
+        display: flex;
+        @include clearfix;
+        button {
+            @include size(2rem);
+            display: block;
+            float: left;
+            border: 1px solid #a9a9a9;
+            margin: 1px;
+            border-radius: 3px;
+        }
+        ul {
+            @include clearfix;
+            flex: 1;
+            display: flex;
+            li {
+                margin: 1px;
+                flex: 1;
+                height: 2rem;
+            }
+            &.kick {
+                li.active {
+                    @include note-active($note-green);
+                }
+            }
+            &.bass {
+                li.active {
+                    @include note-active($note-orange);
+                }
+            }
+            &.oh {
+                li.active {
+                    @include note-active($note-pulple);
+                }
+            }
+            &.ch {
+                li.active {
+                    @include note-active($note-red);
+                }
+            }
+            &.snare {
+                li.active {
+                    @include note-active($note-skyblue);
+                }
+            }
+        }
     }
-  }
-}
-
-.bpmBar {
-  position: absolute;
-  left:0;
-  @include prefix(transition, 200ms, ('moz', 'ms',));
 }
