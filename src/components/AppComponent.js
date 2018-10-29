@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import Tone from 'tone';
-import { Route, Redirect } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import styles from '../styles/App.module.scss';
 import StartAudioContext from 'startaudiocontext';
 import NoteContainer from '../containers/NoteContainer';

@@ -105,6 +105,8 @@ const beatupDispatchProps = (dispatch, ownProps) => {
           const addSoundFile = Object.keys(snapshot.val().beatCopy).filter(beat => {
             if (Object.keys(soundList).indexOf(beat) < 0) {
               return beat;
+            } else {
+              return false;
             }
           });
           const addSoundFilePromiseArr = [];

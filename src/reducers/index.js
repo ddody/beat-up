@@ -35,6 +35,13 @@ const initialState = {
     ch: emptyNote.slice(),
     snare: emptyNote.slice()
   },
+  // beat: [
+  //   { kick: emptyNote.slice() },
+  //   { bass: emptyNote.slice() },
+  //   { oh: emptyNote.slice() },
+  //   { ch: emptyNote.slice() },
+  //   { snare: emptyNote.slice() }
+  // ],
   isBeatListShow: false,
   nowSelectedBeatLine: null,
   nowSelectedUploadFile: null,
