@@ -4,7 +4,7 @@ import styles from '../styles/App.module.scss';
 class NoteComponent extends Component {
 
   onClickHandler(ev) {
-    const sample = ev.target.dataset.sample.split('-');
+    const sample = ev.target.dataset.sample.split('.');
     const sampleIndex = sample[1];
     const sampleName = sample[0];
     let beatCopy = { ...this.props.beat };
@@ -42,7 +42,7 @@ class NoteComponent extends Component {
             onMouseDown={this.onClickHandler.bind(this)}
             onMouseEnter={this.onMouseOverHandler.bind(this)}
             onDragStart={this.onMouseDrag.bind(this)}
-            data-sample={`${this.props.nowBeat}-${index}`}
+            data-sample={`${this.props.nowBeat}.${index}`}
           >
           </li>
         )

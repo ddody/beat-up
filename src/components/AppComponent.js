@@ -1,59 +1,48 @@
-import React, { Component } from 'react';
-import styles from '../styles/App.module.scss';
-import _ from 'lodash';
+import React, { Component, Fragment } from 'react';
 import Tone from 'tone';
-import sounds from '../source/NoteSource';
-import NoteContainer from '../containers/NoteContainer';
+import { Route, Redirect } from 'react-router-dom';
+import styles from '../styles/App.module.scss';
 import StartAudioContext from 'startaudiocontext';
+import NoteContainer from '../containers/NoteContainer';
+import SoundListContainer from '../containers/SoundListContainer';
 
-import firebase from '../services/firebase'
-
-const storage = firebase.storage();
-
-const storageRef = storage.ref();
-
-console.log(storageRef);
 
 class App extends Component {
-  componentDidMount() {
-    StartAudioContext(Tone.context);
+  constructor(props) {
+    super(props);
 
-    this.props.addBeatList(Object.keys(sounds));
+    StartAudioContext(Tone.context);
 
     const playerSetting = {
       "volume": 0,
       "fadeOut": "64n",
     };
 
-    const keys = new Tone.Players(sounds, playerSetting).toMaster();
+    let keys = new Tone.Players(this.props.soundList, playerSetting).toMaster();
 
-    const loop = new Tone.Sequence((time, noteIdx) => {
+    let loop = new Tone.Sequence((time, noteIdx, test) => {
       this.props.setNoteIndex(noteIdx);
       for (let i = 0; i < Object.keys(this.props.beat).length; i++) {
-        if (Object.keys(sounds).indexOf(Object.keys(this.props.beat)[i]) > -1) {
+        if (Object.keys(this.props.soundList).indexOf(Object.keys(this.props.beat)[i]) > -1) {
           if (this.props.beat[Object.keys(this.props.beat)[i]][noteIdx] === 'x') {
-            keys.get(Object.keys(this.props.beat)[i]).start(time, 0, "4n", 0);
+            this.keys.get(Object.keys(this.props.beat)[i]).start(time, 0, "1n", 0);
           }
         }
       }
     }, this.props.initEvents, "16n");
     Tone.Transport.bpm.value = +this.props.bpm;
-    this.keys = keys;
     this.loop = loop;
     loop.start();
+    this.keys = keys;
   }
 
-  initBeatMakeBySound(sounds) {
-    let noteNames = [];
-    let soundsCopy = { ...sounds };
-    let soundsNames = Object.keys(sounds);
-
-    for (let i = 0; i < soundsNames.length; i++) {
-      noteNames.push(soundsNames[i]);
-      soundsCopy[soundsNames[i]] = this.props.initBeat.slice();
-    }
-
-    this.props.onNoteChange(soundsCopy);
+  componentDidMount() {
+    this.props.onBeatLoad(
+      this.props.history.location.pathname,
+      this.props.soundList,
+      this.keys,
+      Tone.Transport.bpm
+    );
   }
 
   onStop() {
@@ -65,8 +54,10 @@ class App extends Component {
   }
 
   onPlay() {
-    Tone.Transport.start();
-    this.props.onBeatState('play');
+    if (!this.props.isSoundUploadAndLoding) {
+      Tone.Transport.start();
+      this.props.onBeatState('play');
+    }
   }
 
   onPause() {
@@ -115,77 +106,139 @@ class App extends Component {
     this.props.onNoteChange(vanilla);
   }
 
-  addMoreBeat() {
-    let addBeat = { ...this.props.beat };
-    addBeat = Object.assign({}, addBeat, {
-      [`noname${Object.keys(addBeat).length}`]: this.props.initBeat.slice()
-    });
-    this.props.onNoteChange(addBeat);
-  }
-
   onClickEventCancel(ev) {
     if (ev.target.dataset.event !== 'selectBeat') {
       this.props.onBeatListShow(false);
     }
   }
 
-  playTest(beat) {
-    console.log(beat);
-    this.keys.get(beat).start();
+  onBeatSave() {
+    this.props.onBeatSave(this.props.beat, this.props.bpm);
+  }
+
+  onClipboardCopy(ev) {
+    ev.target.focus();
+    ev.target.setSelectionRange(0, ev.target.value.length);
+    document.execCommand("copy");
   }
 
   render() {
     return (
-      <div className={styles.App} onClick={this.onClickEventCancel.bind(this)}>
-        <header>
-          <h1>title</h1>
-        </header>
-        <div className="status-bar">
-          <div className="menu-wrap">
-            <button id="start" onClick={this.onPlay.bind(this)}>Play</button>
-            <button onClick={this.onPause.bind(this)}>pause</button>
-            <button onClick={this.onStop.bind(this)}>Stop</button>
-            <button onClick={this.onTest.bind(this)}>Test</button>
-            <button onClick={this.onTest2.bind(this)}>Test2</button>
-            <button>Reset</button>
-            <button>Save</button>
-          </div>
-          <div>
-            <span>BPM: </span>
-            <strong>{this.props.bpm}</strong>
-            <div className="control-bar">
-              <input type="range" defaultValue={this.props.bpm} min="60" max="200" onChange={this.onRangeHandler.bind(this)} />
-            </div>
-          </div>
-        </div>
-        <div>
-          <NoteContainer />
-        </div>
-        <div>
-          <button onClick={this.addMoreBeat.bind(this)}>add more beat</button>
-        </div>
-        {this.props.isBeatListShow &&
-          <div>
-            <ul>
+      <Fragment>
+        <Route path="/" exact render={(props) => {
+          return (
+            <Fragment>
+              <div className={styles.App} onClick={this.onClickEventCancel.bind(this)}>
+                <header>
+                  <h1>title</h1>
+                </header>
+                <div className="status-bar">
+                  <div className="menu-wrap">
+                    <button id="start" onClick={this.onPlay.bind(this)}>Play</button>
+                    <button onClick={this.onPause.bind(this)}>pause</button>
+                    <button onClick={this.onStop.bind(this)}>Stop</button>
+                    <button onClick={this.onTest.bind(this)}>Test</button>
+                    <button onClick={this.onTest2.bind(this)}>Test2</button>
+                    <button>Reset</button>
+                    <button onClick={this.onBeatSave.bind(this)}>Save</button>
+                  </div>
+                  <div>
+                    <span>BPM: </span>
+                    <strong>{this.props.bpm}</strong>
+                    <div className="control-bar">
+                      <input
+                        type="range"
+                        defaultValue={this.props.bpm}
+                        min="60"
+                        max="200"
+                        onChange={this.onRangeHandler.bind(this)}
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <NoteContainer />
+                </div>
+                <div className={styles.beatListWrap}>
+                  <div className={styles.listControl}>
+                    <button onClick={this.props.addBeatLine.bind(this)}>Add line</button>
+                    <button onClick={this.props.removeBeatLine.bind(this)}>Remove line</button>
+                  </div>
+                  <div className={styles.beatList} data-event="selectBeat">
+                    <SoundListContainer keys={this.keys} />
+                  </div>
+                </div>
+              </div>
               {
-                this.props.beatList.map((beat, index) => {
-                  if (Object.keys(this.props.beat).indexOf(beat) < 0) {
-                    return (
-                      <li key={index}>
-                        <button
-                          onClick={this.props.onChangeBeatLine.bind(this, beat)}
-                          data-event="selectBeat"
-                        >{beat}</button>
-                        <button onClick={this.playTest.bind(this, beat)} data-event="selectBeat">play</button>
-                      </li>
-                    )
-                  }
-                })
+                this.props.saveUrlShow &&
+                <div className={styles.popup}>
+                  <input type="text" defaultValue={`${window.location.origin}/${this.props.saveUrl}`} readOnly onClick={this.onClipboardCopy.bind(this)} />
+                  <button onClick={this.props.onBeatSaveShow.bind(this, false)}>Close</button>
+                </div>
               }
-            </ul>
-          </div>
+            </Fragment>
+          )
         }
-      </div>
+        } />
+        <Route path="/:id" exact render={(props) => {
+          console.log(props);
+          // this.props.onBeatLoad(props.match.params.id);
+          return (
+            <Fragment>
+              <div className={styles.App} onClick={this.onClickEventCancel.bind(this)}>
+                <header>
+                  <h1>title</h1>
+                </header>
+                <div className="status-bar">
+                  <div className="menu-wrap">
+                    <button id="start" onClick={this.onPlay.bind(this)}>Play</button>
+                    <button onClick={this.onPause.bind(this)}>pause</button>
+                    <button onClick={this.onStop.bind(this)}>Stop</button>
+                    <button onClick={this.onTest.bind(this)}>Test</button>
+                    <button onClick={this.onTest2.bind(this)}>Test2</button>
+                    <button>Reset</button>
+                    <button onClick={this.onBeatSave.bind(this)}>Save</button>
+                  </div>
+                  <div>
+                    <span>BPM: </span>
+                    <strong>{this.props.bpm}</strong>
+                    <div className="control-bar">
+                      <input
+                        type="range"
+                        defaultValue={this.props.bpm}
+                        min="60"
+                        max="200"
+                        onChange={this.onRangeHandler.bind(this)}
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <NoteContainer />
+                </div>
+                <div className={styles.beatListWrap}>
+                  <div className={styles.listControl}>
+                    <button onClick={this.props.addBeatLine.bind(this)}>Add line</button>
+                    <button onClick={this.props.removeBeatLine.bind(this)}>Remove line</button>
+                  </div>
+                  <div className={styles.beatList} data-event="selectBeat">
+                    <SoundListContainer keys={this.keys} />
+                  </div>
+                </div>
+              </div>
+              {
+                this.props.saveUrlShow &&
+                <div className={styles.popup}>
+                  <input type="text" defaultValue={`${window.location.origin}/${this.props.saveUrl}`} readOnly onClick={this.onClipboardCopy.bind(this)} />
+                  <button onClick={this.props.onBeatSaveShow.bind(this, false)}>Close</button>
+                </div>
+              }
+
+            </Fragment>
+          )
+        }
+        } />
+      </Fragment>
     );
   }
 }

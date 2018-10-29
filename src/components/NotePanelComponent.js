@@ -8,7 +8,7 @@ class NotePanelCompoenent extends Component {
     super(props);
     this.state = {
       onMouse: false
-    }
+    };
   }
 
   onMouseDownHandler(ev) {
@@ -32,15 +32,15 @@ class NotePanelCompoenent extends Component {
   }
 
   playNoteSound(beat) {
-    const audio = new Audio(sounds[beat]);
+    const audio = new Audio(this.props.soundList[beat]);
     audio.play();
   }
 
   onSelectBeatLine(beat) {
+    this.playNoteSound(beat);
     this.props.onSelectBeatLine(beat);
     this.props.onBeatListShow(true);
   }
-
 
   render() {
     return (
@@ -50,7 +50,7 @@ class NotePanelCompoenent extends Component {
             return (
               <div
                 key={index}
-                className={styles.sample}
+                className={this.props.nowSelectedBeatLine === beat ? `${styles.activeLine} ${styles.sample}` : styles.sample}
                 onMouseDown={this.onMouseDownHandler.bind(this)}
                 onMouseUp={this.onMouseUpHandler.bind(this)}
               >
@@ -58,9 +58,6 @@ class NotePanelCompoenent extends Component {
                   onClick={this.onSelectBeatLine.bind(this, beat)}
                   data-event="selectBeat"
                 >{beat}</button>
-                <button
-                  onClick={this.playNoteSound.bind(this, beat)}
-                >Play</button>
                 <ul className={styles[beat]}>
                   <NoteListComponent
                     nowBeat={beat}
@@ -75,8 +72,7 @@ class NotePanelCompoenent extends Component {
           })
         }
       </div>
-    )
-
+    );
   }
 }
 

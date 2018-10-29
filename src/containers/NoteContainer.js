@@ -3,16 +3,16 @@ import NotePanelComponent from '../components/NotePanelComponent';
 import {
   ON_NOTE_CHANGE,
   ON_BEAT_LIST_SHOW,
-  ON_SELECT_BEAT_LINE,
-
-} from '../constants/actionTypes'
+  ON_SELECT_BEAT_LINE
+} from '../constants/actionTypes';
 
 const beatupStateToProps = (state) => {
   return {
     nowNoteIndex: state.nowNoteIndex,
     beat: state.beat,
     isBeatListShow: state.isBeatListShow,
-    nowSelectedBeatLine: state.nowSelectedBeatLine
+    nowSelectedBeatLine: state.nowSelectedBeatLine,
+    soundList: state.soundList
   }
 }
 
@@ -25,9 +25,8 @@ const beatupDispatchProps = (dispatch) => {
       dispatch({ type: ON_BEAT_LIST_SHOW, state });
     },
     onSelectBeatLine(beat) {
-      console.log(beat);
       dispatch({ type: ON_SELECT_BEAT_LINE, beat });
-    }
+    },
   }
 }
 
