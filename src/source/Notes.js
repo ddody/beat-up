@@ -9,5 +9,5 @@ export {
   bass,
   oh,
   ch,
-  snare,
+  snare
 };

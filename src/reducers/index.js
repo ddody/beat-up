@@ -1,4 +1,4 @@
-import sounds from '../source/NoteSource';
+// import sounds from '../source/NoteSource';
 import {
   SET_NOTE_INDEX,
   ON_NOTE_CHANGE,
@@ -16,7 +16,7 @@ import {
   ON_BEAT_SAVE_URL,
   ON_BEAT_SAVE_URL_SHOW,
 } from '../constants/actionTypes';
-// import { kick, bass, openHat, closedHat, snare } from '../source/defaultSound';
+import { defaultSound } from '../source/defaultSound';
 
 const emptyNote = ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-'];
 const initEvents = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31];
@@ -28,30 +28,27 @@ const initialState = {
   isPlay: 'stop',
   initBeat: emptyNote.slice(),
   initEvents: initEvents.slice(),
-  beat: {
-    kick: emptyNote.slice(),
-    bass: emptyNote.slice(),
-    oh: emptyNote.slice(),
-    ch: emptyNote.slice(),
-    snare: emptyNote.slice()
-  },
-  // beat: [
-  //   { kick: emptyNote.slice() },
-  //   { bass: emptyNote.slice() },
-  //   { oh: emptyNote.slice() },
-  //   { ch: emptyNote.slice() },
-  //   { snare: emptyNote.slice() }
-  // ],
+  beat: [
+    { kick: emptyNote.slice() },
+    { bass: emptyNote.slice() },
+    { oh: emptyNote.slice() },
+    { ch: emptyNote.slice() },
+    { Ac_HatCl: emptyNote.slice() },
+    { Ac_HatOp2: emptyNote.slice() },
+    { Ac_KckCym: emptyNote.slice() },
+    { Ac_Kick1: emptyNote.slice() },
+    { Ac_Kick2: emptyNote.slice() },
+    { Ac_Kick3: emptyNote.slice() },
+    { Ac_KiknRide: emptyNote.slice() },
+    { Ac_MidTom: emptyNote.slice() },
+    { Ac_Snare1: emptyNote.slice() },
+    { Ac_Snare3: emptyNote.slice() },
+    { Ac_Snare4: emptyNote.slice() }
+  ],
   isBeatListShow: false,
   nowSelectedBeatLine: null,
   nowSelectedUploadFile: null,
-  soundList: {
-    kick: sounds.kick,
-    bass: sounds.bass,
-    oh: sounds.oh,
-    ch: sounds.ch,
-    snare: sounds.snare
-  },
+  soundList: defaultSound,
   isSoundUploadAndLoding: false,
   saveUrl: null,
   saveUrlShow: false
@@ -73,10 +70,14 @@ function beatupReducer(state = initialState, action) {
         bpm: action.bpm
       });
     case ON_BEAT_INIT:
-      let beatCopy = { ...state.beat };
-      for (let beat in beatCopy) {
-        beatCopy[beat] = state.initBeat.slice();
-      }
+      let beatCopy = state.beat.slice();
+      beatCopy = beatCopy.map((beat, index) => {
+        return (
+          {
+            [Object.keys(beat)[0]]: state.initBeat.slice()
+          }
+        );
+      });
       return Object.assign({}, state, {
         beat: beatCopy,
         nowNoteIndex: null
@@ -94,9 +95,9 @@ function beatupReducer(state = initialState, action) {
         nowSelectedBeatLine: action.beat
       });
     case ON_CHANGE_BEAT_LINE:
-      let beatChangeCopy = { ...state.beat };
-      delete (beatChangeCopy[state.nowSelectedBeatLine]);
-      beatChangeCopy[action.beat] = state.initBeat.slice();
+      let beatChangeCopy = state.beat.slice();
+      beatChangeCopy = beatChangeCopy.filter((beat, index) => !beat[state.nowSelectedBeatLine]);
+      beatChangeCopy.push({ [action.beat]: state.initBeat.slice() });
       return Object.assign({}, state, {
         beat: beatChangeCopy,
         nowSelectedBeatLine: action.beat
@@ -118,17 +119,17 @@ function beatupReducer(state = initialState, action) {
         isSoundUploadAndLoding: action.state
       });
     case ADD_BEAT_LINE:
-      let addBeat = { ...state.beat };
-      addBeat = Object.assign({}, addBeat, {
+      let addBeat = state.beat.slice();
+      addBeat.push({
         [`noname${Object.keys(addBeat).length}`]: state.initBeat.slice()
-      });
+      })
       return Object.assign({}, state, {
         ...state,
         beat: addBeat
       });
     case REMOVE_BEAT_LINE:
-      let _beatChangeCopy = { ...state.beat };
-      delete (_beatChangeCopy[state.nowSelectedBeatLine]);
+      let _beatChangeCopy = state.beat.slice();
+      _beatChangeCopy = _beatChangeCopy.filter((beat, index) => !beat[state.nowSelectedBeatLine]);
       return Object.assign({}, state, {
         beat: _beatChangeCopy,
         nowSelectedBeatLine: null

@@ -46,23 +46,26 @@ class NotePanelCompoenent extends Component {
     return (
       <div className={styles.player} onMouseOut={this.onMouseOverHandler.bind(this)}>
         {
-          Object.keys(this.props.beat).map((beat, index) => {
+          this.props.beat.map((beat, index) => {
+            const _beat = Object.keys(beat)[0];
             return (
               <div
                 key={index}
-                className={this.props.nowSelectedBeatLine === beat ? `${styles.activeLine} ${styles.sample}` : styles.sample}
+                className={this.props.nowSelectedBeatLine === _beat ? `${styles.activeLine} ${styles.sample}` : styles.sample}
                 onMouseDown={this.onMouseDownHandler.bind(this)}
                 onMouseUp={this.onMouseUpHandler.bind(this)}
               >
                 <button
-                  onClick={this.onSelectBeatLine.bind(this, beat)}
+                  onClick={this.onSelectBeatLine.bind(this, _beat)}
                   data-event="selectBeat"
-                >{beat}</button>
-                <ul className={styles[beat]}>
+                >{_beat}</button>
+                <ul className={styles[_beat]}>
                   <NoteListComponent
-                    nowBeat={beat}
+                    nowBeat={_beat}
                     nowNoteIndex={this.props.nowNoteIndex}
+                    nowLineIndex={index}
                     beat={this.props.beat}
+                    beatCopy={this.props.beat[index]}
                     onNoteChange={this.props.onNoteChange}
                     isMouseDown={this.state.onMouse}
                   />

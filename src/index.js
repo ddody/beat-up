@@ -7,7 +7,7 @@ import { connectRouter, routerMiddleware, ConnectedRouter } from 'connected-reac
 import { createBrowserHistory } from 'history'
 import reducer from './reducers';
 import logger from 'redux-logger'
-import App from './containers/App';
+import AppComponent from './components/AppComponent';
 
 const history = createBrowserHistory();
 
@@ -25,7 +25,7 @@ render(
   <Router>
     <Provider store={store}>
       <ConnectedRouter history={history} >
-        <App history={history} />
+        <AppComponent history={history} />
       </ConnectedRouter>
     </Provider>
   </Router>,
