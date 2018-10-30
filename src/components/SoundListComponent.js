@@ -19,6 +19,10 @@ class SoundListCompoennt extends Component {
   }
 
   render() {
+    const beatKeys = this.props.beat.map((_beat, index) => {
+      return Object.keys(_beat)[0];
+    });
+
     return (
       <Fragment>
         <input id="beatSelectButton" type="file" accept="audio/*" onChange={this.addBeatSoundFile.bind(this)} data-event="selectBeat" />
@@ -26,7 +30,7 @@ class SoundListCompoennt extends Component {
         <ul>
           {
             Object.keys(this.props.soundList).map((beat, index) => {
-              if (Object.keys(this.props.beat).indexOf(beat) < 0) {
+              if (beatKeys.indexOf(beat) < 0) {
                 return (
                   <li key={index}>
                     <button

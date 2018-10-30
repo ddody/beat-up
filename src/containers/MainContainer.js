@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import AppComponent from '../components/AppComponent';
+import AppComponent from '../components/MainComponent';
 import firebase from '../services/firebase';
 import {
   SET_NOTE_INDEX,
@@ -33,7 +33,8 @@ const beatupStateToProps = (state) => {
     soundList: state.soundList,
     isSoundUploadAndLoding: state.isSoundUploadAndLoding,
     saveUrl: state.saveUrl,
-    saveUrlShow: state.saveUrlShow
+    saveUrlShow: state.saveUrlShow,
+    router: state.router
   };
 };
 
@@ -70,13 +71,13 @@ const beatupDispatchProps = (dispatch, ownProps) => {
       dispatch({ type: REMOVE_BEAT_LINE });
     },
     onBeatSave(beat, bpm) {
-      let beatCopy = { ...beat };
-      const beatCopyKeys = Object.keys(beatCopy);
-      for (let i = 0; i < beatCopyKeys.length; i++) {
-        if (beatCopyKeys[i].indexOf('noname') > -1) {
-          delete beatCopy[beatCopyKeys[i]];
+      let beatCopy = beat.slice();
+      beatCopy = beatCopy.filter((beat, index) => {
+        if (Object.keys(beat)[0].indexOf('noname') < 0) {
+          return beat;
         }
-      }
+      });
+
       const sheetKey = database.ref(`beatSheet`).push().getKey();
       database.ref(`beatSheet/${sheetKey}`).set({
         beatCopy,
@@ -102,15 +103,17 @@ const beatupDispatchProps = (dispatch, ownProps) => {
           bpm.value = snapshot.val().bpm;
           dispatch({ type: ON_NOTE_CHANGE, beat: snapshot.val().beatCopy });
           dispatch({ type: SET_BEAT_BPM, bpm: snapshot.val().bpm });
-          const addSoundFile = Object.keys(snapshot.val().beatCopy).filter(beat => {
-            if (Object.keys(soundList).indexOf(beat) < 0) {
+          const addSoundFile = snapshot.val().beatCopy.filter(beat => {
+            if (Object.keys(soundList).indexOf(Object.keys(beat)[0]) < 0) {
               return beat;
+            } else {
+              return false;
             }
           });
           const addSoundFilePromiseArr = [];
           for (let i = 0; i < addSoundFile.length; i++) {
             addSoundFilePromiseArr[i] = new Promise((resolve, reject) => {
-              database.ref(`upload/${addSoundFile[i]}`).on('value', (snapshot) => {
+              database.ref(`upload/${Object.keys(addSoundFile[i])}`).on('value', (snapshot) => {
                 const addSoundFile = snapshot.val();
                 resolve(addSoundFile);
                 dispatch({ type: ADD_SOUND_LIST, addSoundFile });

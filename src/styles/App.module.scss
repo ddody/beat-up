@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css?family=Chakra+Petch');
 * {
     box-sizing: border-box;
     margin: 0;
@@ -9,7 +10,11 @@
     -o-user-select: none;
 }
 
-body {
+html,
+body,
+button,
+input {
+    font-family: 'Chakra Petch', sans-serif;
     font-size: 16px;
 }
 
@@ -23,7 +28,7 @@ button {
     background: transparent;
 }
 
-$main-color: #865CD6;
+$main-color: #3b20b1;
 $note-green: #0dc75b;
 $note-red: #ff054a;
 $note-orange: #ff7317;
@@ -53,14 +58,17 @@ $l-max: 90;
     line-height: 0
 }
 
-@mixin prefix($property, $value, $prefixes: ()) {
+@mixin prefix($property,
+$value,
+$prefixes: ()) {
     @each $prefix in $prefixes {
         -#{$prefix}-#{$property}: $value;
     }
     #{$property}: $value;
 }
 
-@mixin size($width, $height: $width) {
+@mixin size($width,
+$height: $width) {
     width: $width;
     height: $height;
 }
@@ -73,101 +81,192 @@ $l-max: 90;
 }
 
 .App {
-    text-align: center;
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-    min-height: 600px;
-    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    min-height: 800px;
+}
+
+header {
+    border-top: 1px solid #3b20b1;
+    background-color: #eaeaea;
+    .headerWrap {
+        width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+        h1 {
+            height: 80px;
+            line-height: 80px;
+            color: #3b20b1;
+            font-weight: 600;
+        }
+    }
 }
 
 .note {
-    @include prefix(transition, 200ms, ('moz', 'ms', 'webkit'));
+    @include prefix(transition,
+    200ms,
+    ('moz', 'ms', 'webkit'));
     border-radius: 3px;
-    background-color: #e0e0e0;
+    background-color: #464646;
     &:nth-child(4n - 3) {
-        background-color: #d0d0d0;
-        border-left: 1px solid $main-color;
+        background-color: #616161;
+        border-right: 2px solid #70f081;
     }
     &.active {
         &.on {
-            @include prefix(transform, matrix3d(1.4, -0.77, 0.34, 0, 0.77, 1.4, 0.34, -0.001, -0.34, -0.34, 0.9, 0, 2, 2, 4, 1), ('moz', 'ms', 'webkit'));
+            @include prefix(transform,
+            matrix3d(1.4, -0.77, 0.34, 0, 0.77, 1.4, 0.34, -0.001, -0.34, -0.34, 0.9, 0, 2, 2, 4, 1),
+            ('moz', 'ms', 'webkit'));
         }
     }
     &.on {
-        background-color: #d2baff;
+        background-color: rgba(112, 240, 129, 0.6);
     }
 }
 
-.player {
-    @for $i from 1 through 30 {
-        .sample:nth-child(#{$i}) {
-            ul {
-                li.active {
-                    background-color: darken(hsl(random(360), $s-min+random($s-max+-$s-min), $l-min+random($l-max+-$l-min)), 10%);
-                }
-            }
-        }
-    }
-    .sample {
+.statusBar {
+    background-color: #70f081;
+    .menuWrap {
         display: flex;
-        @include clearfix;
+        max-width: 1200px;
+        margin: 0 auto;
+        width: 100%;
+        justify-content: flex-end;
         button {
-            width: 5rem;
-            height: 2.4rem;
-            display: block;
-            margin-bottom: 1px;
-            border-radius: 3px;
-            background-color: #5829b3;
-            border: 0;
-            color: #fff;
-            padding: 0 4px;
+            @include prefix(transition,
+            200ms,
+            ('moz', 'ms', 'webkit'));
+            width: 6rem;
+            height: 30px;
+            background-color: #000;
+            color: #70f081;
+            border-left: 2px solid #70f081;
+            font-weight: 600;
+            &:hover {
+                color: #000;
+                background-color: #70f081;
+            }
         }
-        ul {
-            @include clearfix;
+    }
+}
+
+.playerWrap {
+    background-color: #000;
+    padding: 35px 20px;
+    .player {
+        max-width: 1200px;
+        margin: 0 auto;
+        @for $i from 1 through 30 {
+            .sample:nth-child(#{$i}) {
+                ul {
+                    li.active {
+                        background-color: lighten(hsl(random(360), $s-min+random($s-max+-$s-min), $l-min+random($l-max+-$l-min)), 11%);
+                    }
+                }
+            }
+        }
+        .sample {
             display: flex;
-            flex: 1;
-            li {
-                margin: 0 1px 1px;
+            @include clearfix;
+            button {
+                width: 5rem;
+                height: 2rem;
+                display: block;
+                margin-bottom: 1px;
+                border-radius: 3px;
+                background-color: #3b20b1;
+                border: 0;
+                color: #fff;
+                padding: 0 4px;
+                font-size: 0.85rem;
+            }
+            ul {
+                @include clearfix;
+                display: flex;
                 flex: 1;
-                height: 2.4rem;
-            }
-            &.kick {
-                li.active {
-                    @include note-active($note-green);
+                li {
+                    margin: 0 1px 1px;
+                    flex: 1;
+                    height: 2rem;
+                }
+                &.kick {
+                    li.active {
+                        @include note-active($note-green);
+                    }
+                }
+                &.bass {
+                    li.active {
+                        @include note-active($note-orange);
+                    }
+                }
+                &.oh {
+                    li.active {
+                        @include note-active($note-pulple);
+                    }
+                }
+                &.ch {
+                    li.active {
+                        @include note-active($note-red);
+                    }
+                }
+                &.snare {
+                    li.active {
+                        @include note-active($note-skyblue);
+                    }
                 }
             }
-            &.bass {
-                li.active {
-                    @include note-active($note-orange);
-                }
+        }
+        .activeLine {
+            button {
+                background-color: #70f081;
+                color: #3b20b1;
+                font-weight: 600;
             }
-            &.oh {
-                li.active {
-                    @include note-active($note-pulple);
-                }
-            }
-            &.ch {
-                li.active {
-                    @include note-active($note-red);
-                }
-            }
-            &.snare {
-                li.active {
-                    @include note-active($note-skyblue);
+            li {
+                border-top: 2px solid #74ff86;
+                border-bottom: 2px solid #74ff86;
+                &.on {
+                    background-color: rgba(112, 240, 129, 0.6);
                 }
             }
         }
     }
-    .activeLine {
+}
+
+.listControlWrap {
+    background-color: #2f2f2f;
+    padding: 15px 20px;
+    .listControl {
+        max-width: 1200px;
+        width: 100%;
+        display: flex;
+        margin: 0 auto;
         button {
-            background-color: #2a086b;
+            background-color: #70f081;
+            color: #3b20b1;
+            padding: 5px 10px;
+            width: 10rem;
+            margin-right: 5px;
+            border-radius: 5px;
+            font-weight: 600;
         }
-        li {
-            border-top: 2px solid $main-color;
-            border-bottom: 2px solid $main-color;
-            &.on {
-                background-color: #d2baff;
+        .bpmWrap {
+            flex: 1;
+            display: flex;
+            text-align: right;
+            padding-top: 4px;
+            .bpmTextWarp {
+                flex: 1;
+                color: #fff;
+            }
+            .controlBar {
+                flex: 3;
+                padding: 0 10px;
+                input {
+                    width: 100%;
+                }
             }
         }
     }
@@ -175,7 +274,8 @@ $l-max: 90;
 
 .beatListWrap {
     display: flex;
-    margin-top: 10px;
+    background-color: #000;
+    padding: 35px 20px 50px;
     .listControl {
         button {
             width: 5rem;
@@ -183,7 +283,7 @@ $l-max: 90;
             display: block;
             margin: 0 1px 1px;
             border-radius: 3px;
-            background-color: #5829b3;
+            background-color: #3b20b1;
             border: 0;
             color: #fff;
         }
@@ -191,33 +291,48 @@ $l-max: 90;
     .beatList {
         min-height: 10rem;
         width: 100%;
-        border: 1px solid #5829b3;
+        max-width: 1200px;
+        margin: 0 auto;
+        border: 1px solid #3b20b1;
         border-radius: 5px;
+        background-color: #eaeaea;
         input[type='file'] {
             @include blind;
         }
         input[type='file']+label {
             display: block;
-            background-color: #5829b3;
+            background-color: #3b20b1;
             color: #fff;
             padding: 0.5em;
+            cursor: pointer;
         }
         ul {
-            text-align: left;
+            padding: 10px;
             li {
+                @include clearfix();
                 display: inline-block;
-                background-color: #ddd;
-                border-radius: 4px;
+                width: calc(33.3% - 20px);
+                background-color: #70f081;
+                border-radius: 6px;
                 text-align: left;
-                margin: 5px 5px 0;
+                margin: 10px 10px 0;
                 font-size: 0;
                 overflow: hidden;
                 button {
-                    padding: 5px 10px 5px;
+                    float: left;
+                    padding: 10px 5px 10px 12px;
+                    width: calc(100% - 60px);
+                    text-align: left;
+                    color: #3b20b1;
+                    font-weight: 600;
                     &:last-child {
                         color: #fff;
-                        border-left: 1px solid #5829b3;
-                        background-color: #5829b3;
+                        border-left: 1px solid #3b20b1;
+                        background-color: #3b20b1;
+                        float: right;
+                        width: 60px;
+                        padding: 10px 5px;
+                        text-align: center;
                     }
                 }
             }
@@ -235,15 +350,17 @@ $l-max: 90;
     justify-content: center;
     flex-direction: column;
     align-items: center;
-    background-color: rgba(88, 41, 179, 0.5);
-    @include prefix(transition, 200ms, ('moz', 'ms', 'webkit'));
+    background-color: rgba(112, 240, 129, 0.5);
+    @include prefix(transition,
+    200ms,
+    ('moz', 'ms', 'webkit'));
     input[type='text'] {
         width: 50%;
         text-align: center;
         height: 4rem;
         border-radius: 2rem;
         padding: 1rem;
-        border: 2px solid #5829b3;
+        border: 2px solid #3b20b1;
         font-size: 1.5rem;
     }
     button {
@@ -252,7 +369,7 @@ $l-max: 90;
         display: block;
         margin-top: 10px;
         border-radius: 3px;
-        background-color: #5829b3;
+        background-color: #3b20b1;
         border: 0;
         color: #fff;
         padding: 0 4px;

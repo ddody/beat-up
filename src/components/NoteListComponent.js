@@ -7,15 +7,18 @@ class NoteComponent extends Component {
     const sample = ev.target.dataset.sample.split('.');
     const sampleIndex = sample[1];
     const sampleName = sample[0];
-    let beatCopy = { ...this.props.beat };
+    let beatCopy = { ...this.props.beatCopy };
     let sampleCopy = beatCopy[sampleName].slice();
-    if (this.props.beat[sampleName][sampleIndex] === 'x') {
+    if (this.props.beatCopy[sampleName][sampleIndex] === 'x') {
       sampleCopy[sampleIndex] = '-';
     } else {
       sampleCopy[sampleIndex] = 'x';
     }
+
     beatCopy[sampleName] = sampleCopy;
-    this.props.onNoteChange(beatCopy);
+    let _beatCopy = this.props.beat.slice();
+    _beatCopy[this.props.nowLineIndex] = beatCopy;
+    this.props.onNoteChange(_beatCopy);
   }
 
   onMouseOverHandler(ev) {
@@ -30,12 +33,12 @@ class NoteComponent extends Component {
 
   render() { // 네모칸도 뺀다
     return (
-      this.props.beat[this.props.nowBeat].map((beat, index) => {
+      this.props.beatCopy[this.props.nowBeat].map((beat, index) => {
         return (
           <li
             key={index}
             className={
-              this.props.beat[this.props.nowBeat][index] === 'x' ?
+              this.props.beatCopy[this.props.nowBeat][index] === 'x' ?
                 this.props.nowNoteIndex === index ? `${styles.note} ${styles.active} ${styles.on}` : `${styles.note} ${styles.active}`
                 : this.props.nowNoteIndex === index ? `${styles.note} ${styles.on}` : styles.note
             }
