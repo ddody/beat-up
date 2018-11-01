@@ -5,6 +5,7 @@ import MainContainer from '../containers/MainContainer';
 class App extends Component {
 
   render() {
+    console.log(this.props);
     return (
       <Switch>
         <Route path="/" exact render={(props) => <MainContainer />} />
