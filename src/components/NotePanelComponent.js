@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import styles from '../styles/App.module.scss';
 import NoteListComponent from './NoteListComponent';
-// import sounds from '../source/NoteSource';
+import NumberComponent from './NumberComponent';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 class NotePanelCompoenent extends Component {
   constructor(props) {
@@ -42,6 +43,10 @@ class NotePanelCompoenent extends Component {
     this.props.onBeatListShow(true);
   }
 
+  onMuteBeat(beat) {
+    this.props.onMuteBeat(beat);
+  }
+
   render() {
     return (
       <div className={styles.player} onMouseOut={this.onMouseOverHandler.bind(this)}>
@@ -51,15 +56,40 @@ class NotePanelCompoenent extends Component {
             return (
               <div
                 key={index}
-                className={this.props.nowSelectedBeatLine === _beat ? `${styles.activeLine} ${styles.sample} panelWrap` : `${styles.sample} panelWrap`}
+                className={
+                  this.props.nowSelectedBeatLine === _beat ?
+                    this.props.muteBeat.indexOf(_beat) > -1 ?
+                      `${styles.sample} ${styles.muteLine} panelWrap` :
+                      `${styles.activeLine} ${styles.sample} panelWrap` :
+                    this.props.muteBeat.indexOf(_beat) > -1 ?
+                      `${styles.sample} ${styles.muteLine} panelWrap` :
+                      `${styles.sample} panelWrap`
+                }
                 onMouseDown={this.onMouseDownHandler.bind(this)}
                 onMouseUp={this.onMouseUpHandler.bind(this)}
               >
                 <button
+                  className={styles.muteButton}
+                  onClick={this.onMuteBeat.bind(this, _beat)}
+                >
+                  {
+                    this.props.muteBeat.indexOf(_beat) > -1 ?
+                      <FontAwesomeIcon
+                        icon="volume-off"
+                      /> :
+                      <FontAwesomeIcon
+                        icon="volume-up"
+                      />
+                  }
+                </button>
+                <button
                   className="panerSelectButton"
                   onClick={this.onSelectBeatLine.bind(this, _beat)}
                   data-event="selectBeat"
-                >{_beat}</button>
+                >
+                  {_beat}
+                </button>
+
                 <ul className={styles[_beat]}>
                   <NoteListComponent
                     nowBeat={_beat}
@@ -75,6 +105,14 @@ class NotePanelCompoenent extends Component {
             );
           })
         }
+        <div className={styles.numberWrap}>
+          <ul>
+            <NumberComponent
+              noteCount={this.props.initBeat}
+              currentNoteIndex={this.props.nowNoteIndex}
+            />
+          </ul>
+        </div>
       </div>
     );
   }

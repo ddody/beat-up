@@ -20,11 +20,12 @@ class MainComponent extends Component {
     let loop = new Tone.Sequence((time, noteIdx, test) => {
       this.props.setNoteIndex(noteIdx);
       for (let i = 0; i < this.props.beat.length; i++) {
-        if (Object.keys(this.props.soundList).indexOf(Object.keys(this.props.beat[i])[0]) > -1) {
-          if (this.props.beat[i][Object.keys(this.props.beat[i])[0]][noteIdx] === 'x') {
-            console.log(Object.keys(this.props.beat[i])[0]);
-            console.log(keys);
-            this.keys.get(Object.keys(this.props.beat[i])[0]).start(time, 0, "1n", 0);
+        const nowBeat = Object.keys(this.props.beat[i])[0];
+        if (Object.keys(this.props.soundList).indexOf(nowBeat) > -1) {
+          if (this.props.beat[i][nowBeat][noteIdx] === 'x') {
+            if (this.props.muteBeat.indexOf(nowBeat) < 0) {
+              this.keys.get(nowBeat).start(time, 0, "1n", 0);
+            }
           }
         }
       }
@@ -115,12 +116,14 @@ class MainComponent extends Component {
             </div>
           </div>
           <div className={styles.playerWrap}>
-            <NoteContainer />
+            <NoteContainer
+              players={this.keys}
+            />
           </div>
           <div className={styles.listControlWrap}>
             <div className={styles.listControl}>
               <div className={styles.ControlButtonWrap}>
-                <button onClick={this.props.addBeatLine.bind(this)}>Add line</button>
+                {this.props.beat.length < this.props.maxLine ? <button onClick={this.props.addBeatLine.bind(this)}>Add line</button> : null}
                 <button onClick={this.props.removeBeatLine.bind(this)}>Remove line</button>
               </div>
               <div className={styles.bpmWrap}>

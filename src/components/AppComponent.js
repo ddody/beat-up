@@ -8,7 +8,7 @@ class App extends Component {
     return (
       <Fragment>
         <Route path="/" exact render={(props) => <MainContainer />} />
-        <Route path="/:id" exact render={(props) => <MainContainer />} />
+        <Route path="/:id" exact render={(props) => <MainContainer {...props} />} />
       </Fragment>
     );
   }

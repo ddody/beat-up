@@ -4,6 +4,7 @@ import {
   noteChange,
   beatListShow,
   beatLineSelect,
+  beatMute
 } from '../actions'
 
 const beatupStateToProps = (state) => {
@@ -12,7 +13,9 @@ const beatupStateToProps = (state) => {
     beat: state.beat,
     isBeatListShow: state.isBeatListShow,
     nowSelectedBeatLine: state.nowSelectedBeatLine,
-    soundList: state.soundList
+    soundList: state.soundList,
+    initBeat: state.initBeat,
+    muteBeat: state.muteBeat
   }
 }
 
@@ -27,6 +30,9 @@ const beatupDispatchProps = (dispatch) => {
     onSelectBeatLine(beat) {
       dispatch(beatLineSelect(beat));
     },
+    onMuteBeat(beat) {
+      dispatch(beatMute(beat));
+    }
   }
 }
 

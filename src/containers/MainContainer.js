@@ -34,7 +34,9 @@ const beatupStateToProps = (state) => {
     isSoundUploadAndLoding: state.isSoundUploadAndLoding,
     saveUrl: state.saveUrl,
     saveUrlShow: state.saveUrlShow,
-    router: state.router
+    router: state.router,
+    muteBeat: state.muteBeat,
+    maxLine: state.maxLine
   };
 };
 
@@ -102,48 +104,52 @@ const beatupDispatchProps = (dispatch, ownProps) => {
       if (beatKey !== "/") {
         dispatch(soundUploadAndLoad(true));
         database.ref(`beatSheet${beatKey}`).on('value', (snapshot) => {
-          bpm.value = snapshot.val().bpm;
-          dispatch(noteChange(snapshot.val().beatCopy));
-          dispatch(beatBpmSet(snapshot.val().bpm));
-          const addSoundFile = snapshot.val().beatCopy.filter(beat => {
-            if (Object.keys(soundList).indexOf(Object.keys(beat)[0]) < 0) {
-              return beat;
-            } else {
-              return false;
-            }
-          });
-          const addSoundFilePromiseArr = [];
-          for (let i = 0; i < addSoundFile.length; i++) {
-            addSoundFilePromiseArr[i] = new Promise((resolve, reject) => {
-              database.ref(`upload/${Object.keys(addSoundFile[i])}`).on('value', (snapshot) => {
-                const addSoundFile = snapshot.val();
-                resolve(addSoundFile);
-                dispatch(soundListAdd(addSoundFile));
-              });
-            });
-          }
-
-          Promise.all(addSoundFilePromiseArr)
-            .then((result) => {
-              for (let i = 0; i < result.length; i++) {
-                addKeysPromiseArr[i] = new Promise((resolve, reject) => {
-                  keys.add(result[i].beatName, result[i].beatUrl, () => {
-                    resolve(i);
-                  });
-                });
+          if (snapshot.val()) {
+            bpm.value = snapshot.val().bpm;
+            dispatch(noteChange(snapshot.val().beatCopy));
+            dispatch(beatBpmSet(snapshot.val().bpm));
+            const addSoundFile = snapshot.val().beatCopy.filter(beat => {
+              if (Object.keys(soundList).indexOf(Object.keys(beat)[0]) < 0) {
+                return beat;
+              } else {
+                return false;
               }
-
-              Promise.all(addKeysPromiseArr)
-                .then((result) => {
-                  dispatch(soundUploadAndLoad(false));
-                })
-                .catch((err) => {
-                  console.log(err);
+            });
+            const addSoundFilePromiseArr = [];
+            for (let i = 0; i < addSoundFile.length; i++) {
+              addSoundFilePromiseArr[i] = new Promise((resolve, reject) => {
+                database.ref(`upload/${Object.keys(addSoundFile[i])}`).on('value', (snapshot) => {
+                  const addSoundFile = snapshot.val();
+                  resolve(addSoundFile);
+                  dispatch(soundListAdd(addSoundFile));
                 });
-            })
-            .catch((err) => {
-              console.log(err);
-            })
+              });
+            }
+
+            Promise.all(addSoundFilePromiseArr)
+              .then((result) => {
+                for (let i = 0; i < result.length; i++) {
+                  addKeysPromiseArr[i] = new Promise((resolve, reject) => {
+                    keys.add(result[i].beatName, result[i].beatUrl, () => {
+                      resolve(i);
+                    });
+                  });
+                }
+
+                Promise.all(addKeysPromiseArr)
+                  .then((result) => {
+                    dispatch(soundUploadAndLoad(false));
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                  });
+              })
+              .catch((err) => {
+                console.log(err);
+              })
+          } else {
+            ownProps.history.push('/');
+          }
         });
       }
     }

@@ -13,3 +13,4 @@ export const BEAT_URL_SAVE = 'BEAT_URL_SAVE';
 export const BEAT_URL_SAVE_AND_SHOW = 'BEAT_URL_SAVE_AND_SHOW';
 export const SOUND_LIST_ADD = 'SOUND_LIST_ADD';
 export const SOUND_UPLOAD_AND_LOAD = 'SOUND_UPLOAD_AND_LOAD';
+export const BEAT_MUTE = 'BEAT_MUTE';

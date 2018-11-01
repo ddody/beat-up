@@ -14,6 +14,7 @@ import {
   BEAT_LINE_CHANGE,
   SOUND_LIST_ADD,
   SOUND_UPLOAD_AND_LOAD,
+  BEAT_MUTE
 } from '../constants/actionTypes';
 
 export const noteIndexSet = (noteIdx) => {
@@ -75,3 +76,7 @@ export const beatSoundFileAdd = (file) => {
 export const beatLineChange = (beat) => {
   return { type: BEAT_LINE_CHANGE, beat };
 };
+
+export const beatMute = (beat) => {
+  return { type: BEAT_MUTE, beat }
+}

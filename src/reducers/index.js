@@ -14,6 +14,7 @@ import {
   BEAT_URL_SAVE_AND_SHOW,
   SOUND_LIST_ADD,
   SOUND_UPLOAD_AND_LOAD,
+  BEAT_MUTE
 } from '../constants/actionTypes';
 import { defaultSound } from '../source/defaultSound';
 
@@ -31,18 +32,13 @@ export const initialState = {
     { snare: emptyNote.slice() },
     { kick: emptyNote.slice() },
     { bass: emptyNote.slice() },
-    { oh: emptyNote.slice() },
     { ch: emptyNote.slice() },
     { Ac_HatCl: emptyNote.slice() },
     { Ac_HatOp2: emptyNote.slice() },
     { Ac_KckCym: emptyNote.slice() },
-    { Ac_Kick1: emptyNote.slice() },
-    { Ac_Kick2: emptyNote.slice() },
     { Ac_Kick3: emptyNote.slice() },
     { Ac_KiknRide: emptyNote.slice() },
     { Ac_MidTom: emptyNote.slice() },
-    { Ac_Snare1: emptyNote.slice() },
-    { Ac_Snare3: emptyNote.slice() },
     { Ac_Snare4: emptyNote.slice() }
   ],
   isBeatListShow: false,
@@ -51,7 +47,9 @@ export const initialState = {
   soundList: defaultSound,
   isSoundUploadAndLoding: false,
   saveUrl: null,
-  saveUrlShow: false
+  saveUrlShow: false,
+  muteBeat: [],
+  maxLine: 12
 };
 
 function beatupReducer(state = initialState, action) {
@@ -80,7 +78,8 @@ function beatupReducer(state = initialState, action) {
       });
       return Object.assign({}, state, {
         beat: beatCopy,
-        nowNoteIndex: null
+        nowNoteIndex: null,
+        muteBeat: []
       });
     case BEAT_STATE_SET:
       return Object.assign({}, state, {
@@ -141,6 +140,17 @@ function beatupReducer(state = initialState, action) {
     case BEAT_URL_SAVE_AND_SHOW:
       return Object.assign({}, state, {
         saveUrlShow: action.state
+      });
+    case BEAT_MUTE:
+      let muteBeatCopy = state.muteBeat.slice();
+      if (muteBeatCopy.indexOf(action.beat) > -1) {
+        muteBeatCopy.splice(muteBeatCopy.indexOf(action.beat), 1);
+      } else {
+        muteBeatCopy.push(action.beat);
+      }
+
+      return Object.assign({}, state, {
+        muteBeat: muteBeatCopy
       });
     default:
       return Object.assign({}, state);
