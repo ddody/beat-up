@@ -4,12 +4,12 @@ import { HashRouter, BrowserRouter as Router } from 'react-router-dom';
 import { createStore, applyMiddleware, compose } from 'redux';
 import { Provider } from 'react-redux';
 import { connectRouter, routerMiddleware, ConnectedRouter } from 'connected-react-router';
-import { createHashHistory } from 'history'
+import { createBrowserHistory } from 'history'
 import reducer from './reducers';
 import logger from 'redux-logger'
 import AppComponent from './components/AppComponent';
 
-const history = createHashHistory();
+const history = createBrowserHistory();
 
 const store = createStore(
   connectRouter(history)(reducer),

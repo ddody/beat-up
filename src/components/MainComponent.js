@@ -8,7 +8,6 @@ import SoundListContainer from '../containers/SoundListContainer';
 class MainComponent extends Component {
   constructor(props) {
     super(props);
-    console.log(window.location.origin);
     StartAudioContext(Tone.context);
 
     const playerSetting = {
@@ -37,7 +36,6 @@ class MainComponent extends Component {
   }
 
   componentDidMount() {
-    console.log(this.props.router);
     this.props.onBeatLoad(
       this.props.router.location.pathname,
       this.props.soundList,
@@ -151,7 +149,7 @@ class MainComponent extends Component {
         {
           this.props.saveUrlShow &&
           <div className={styles.popup}>
-            <input type="text" defaultValue={`${window.location.origin}/#/${this.props.saveUrl}`} readOnly onClick={this.onClipboardCopy.bind(this)} />
+            <input type="text" defaultValue={`${window.location.origin}/${this.props.saveUrl}`} readOnly onClick={this.onClipboardCopy.bind(this)} />
             <button onClick={this.props.onBeatSaveShow.bind(this, false)}>Close</button>
           </div>
         }
