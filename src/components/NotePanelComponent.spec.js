@@ -1,8 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import NotePanelComponent from './NotePanelComponent';
-import { initialState } from '../reducers/index';
-import { defaultSound } from '../source/defaultSound';
 
 function setup() {
   const props = {
@@ -77,7 +75,8 @@ describe('note panel component', () => {
       relatedTarget: {
         tagName: 'DIV'
       }
-    }
+    };
+    // 디폴드....
     component.setState({ onMouse: true });
 
     component.simulate('mouseOut', mockTarget);

@@ -1,5 +1,4 @@
 import React, { Component, Fragment } from 'react';
-import styles from '../styles/App.module.scss';
 
 class SoundListCompoennt extends Component {
   playTest(beat) {
@@ -41,6 +40,8 @@ class SoundListCompoennt extends Component {
                     <button className="audioPlayButton" onClick={this.playTest.bind(this, beat)} data-event="selectBeat">Play</button>
                   </li>
                 );
+              } else {
+                return false;
               }
             })
           }

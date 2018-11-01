@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import styles from '../styles/App.module.scss';
 import NoteListComponent from './NoteListComponent';
-import sounds from '../source/NoteSource';
+// import sounds from '../source/NoteSource';
 
 class NotePanelCompoenent extends Component {
   constructor(props) {

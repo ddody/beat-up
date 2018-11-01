@@ -7,12 +7,12 @@ import {
   beatBpmSet,
   beatInitialized,
   beatStateSet,
-  beatListShown,
+  beatListShow,
   soundListAdd,
   beatLineSelect,
   beatLineAdd,
   beatLineRemove,
-  beatUrlSaved,
+  beatUrlSave,
   beatUrlSaveAndShow,
   soundUploadAndLoad
 } from '../actions';
@@ -56,7 +56,7 @@ const beatupDispatchProps = (dispatch, ownProps) => {
       dispatch(beatStateSet(state));
     },
     onBeatListShow(state) {
-      dispatch(beatListShown(state));
+      dispatch(beatListShow(state));
     },
     addSoundList(sound) {
       dispatch(soundListAdd(sound));
@@ -75,6 +75,8 @@ const beatupDispatchProps = (dispatch, ownProps) => {
       beatCopy = beatCopy.filter((beat, index) => {
         if (Object.keys(beat)[0].indexOf('noname') < 0) {
           return beat;
+        } else {
+          return false;
         }
       });
 
@@ -84,7 +86,7 @@ const beatupDispatchProps = (dispatch, ownProps) => {
         bpm,
       })
         .then(() => {
-          dispatch(beatUrlSaved(sheetKey));
+          dispatch(beatUrlSave(sheetKey));
           dispatch(beatUrlSaveAndShow(true));
         })
         .catch((err) => {
@@ -101,7 +103,7 @@ const beatupDispatchProps = (dispatch, ownProps) => {
         dispatch(soundUploadAndLoad(true));
         database.ref(`beatSheet${beatKey}`).on('value', (snapshot) => {
           bpm.value = snapshot.val().bpm;
-          dispatch(NoteChange(snapshot.val().beatCopy));
+          dispatch(noteChange(snapshot.val().beatCopy));
           dispatch(beatBpmSet(snapshot.val().bpm));
           const addSoundFile = snapshot.val().beatCopy.filter(beat => {
             if (Object.keys(soundList).indexOf(Object.keys(beat)[0]) < 0) {

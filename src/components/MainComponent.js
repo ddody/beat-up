@@ -23,6 +23,8 @@ class MainComponent extends Component {
       for (let i = 0; i < this.props.beat.length; i++) {
         if (Object.keys(this.props.soundList).indexOf(Object.keys(this.props.beat[i])[0]) > -1) {
           if (this.props.beat[i][Object.keys(this.props.beat[i])[0]][noteIdx] === 'x') {
+            console.log(Object.keys(this.props.beat[i])[0]);
+            console.log(keys);
             this.keys.get(Object.keys(this.props.beat[i])[0]).start(time, 0, "1n", 0);
           }
         }
