@@ -76,7 +76,7 @@ describe('note panel component', () => {
         tagName: 'DIV'
       }
     };
-    // 디폴드....
+    // 디폴드...
     component.setState({ onMouse: true });
 
     component.simulate('mouseOut', mockTarget);
