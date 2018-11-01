@@ -98,7 +98,6 @@ const beatupDispatchProps = (dispatch, ownProps) => {
       dispatch(beatUrlSaveAndShow(state));
     },
     onBeatLoad(beatKey, soundList, keys, bpm) {
-      console.log(beatKey);
       const addKeysPromiseArr = [];
       if (beatKey !== "/") {
         dispatch(soundUploadAndLoad(true));
