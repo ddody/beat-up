@@ -311,7 +311,7 @@ header {
             li {
                 @include clearfix();
                 display: inline-block;
-                width: calc(33.3% - 20px);
+                width: calc(20% - 20px);
                 background-color: #70f081;
                 border-radius: 6px;
                 text-align: left;

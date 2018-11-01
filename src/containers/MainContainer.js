@@ -2,20 +2,20 @@ import { connect } from 'react-redux';
 import AppComponent from '../components/MainComponent';
 import firebase from '../services/firebase';
 import {
-  SET_NOTE_INDEX,
-  ON_NOTE_CHANGE,
-  SET_BEAT_BPM,
-  ON_BEAT_INIT,
-  ON_BEAT_STATE,
-  ON_BEAT_LIST_SHOW,
-  ADD_SOUND_LIST,
-  ON_SELECT_BEAT_LINE,
-  ADD_BEAT_LINE,
-  REMOVE_BEAT_LINE,
-  ON_BEAT_SAVE_URL,
-  ON_BEAT_SAVE_URL_SHOW,
-  IS_SOUND_UPLOAD_AND_LODING
-} from '../constants/actionTypes';
+  noteIndexSet,
+  noteChange,
+  beatBpmSet,
+  beatInitialized,
+  beatStateSet,
+  beatListShown,
+  soundListAdd,
+  beatLineSelect,
+  beatLineAdd,
+  beatLineRemove,
+  beatUrlSaved,
+  beatUrlSaveAndShow,
+  soundUploadAndLoad
+} from '../actions';
 
 const database = firebase.database();
 
@@ -41,34 +41,34 @@ const beatupStateToProps = (state) => {
 const beatupDispatchProps = (dispatch, ownProps) => {
   return {
     setNoteIndex(noteIdx) {
-      dispatch({ type: SET_NOTE_INDEX, noteIdx });
+      dispatch(noteIndexSet(noteIdx));
     },
     onNoteChange(beat) {
-      dispatch({ type: ON_NOTE_CHANGE, beat });
+      dispatch(noteChange(beat));
     },
     setBeatBpm(bpm) {
-      dispatch({ type: SET_BEAT_BPM, bpm });
+      dispatch(beatBpmSet(bpm));
     },
     onBeatInit() {
-      dispatch({ type: ON_BEAT_INIT });
+      dispatch(beatInitialized());
     },
     onBeatState(state) {
-      dispatch({ type: ON_BEAT_STATE, state });
+      dispatch(beatStateSet(state));
     },
     onBeatListShow(state) {
-      dispatch({ type: ON_BEAT_LIST_SHOW, state });
+      dispatch(beatListShown(state));
     },
     addSoundList(sound) {
-      dispatch({ type: ADD_SOUND_LIST, sound });
+      dispatch(soundListAdd(sound));
     },
     onSelectBeatLine(beat) {
-      dispatch({ type: ON_SELECT_BEAT_LINE, beat });
+      dispatch(beatLineSelect(beat));
     },
     addBeatLine() {
-      dispatch({ type: ADD_BEAT_LINE });
+      dispatch(beatLineAdd());
     },
     removeBeatLine() {
-      dispatch({ type: REMOVE_BEAT_LINE });
+      dispatch(beatLineRemove());
     },
     onBeatSave(beat, bpm) {
       let beatCopy = beat.slice();
@@ -84,8 +84,8 @@ const beatupDispatchProps = (dispatch, ownProps) => {
         bpm,
       })
         .then(() => {
-          dispatch({ type: ON_BEAT_SAVE_URL, saveUrl: sheetKey });
-          dispatch({ type: ON_BEAT_SAVE_URL_SHOW, state: true });
+          dispatch(beatUrlSaved(sheetKey));
+          dispatch(beatUrlSaveAndShow(true));
         })
         .catch((err) => {
           console.log(err);
@@ -93,16 +93,16 @@ const beatupDispatchProps = (dispatch, ownProps) => {
         });
     },
     onBeatSaveShow(state) {
-      dispatch({ type: ON_BEAT_SAVE_URL_SHOW, state });
+      dispatch(beatUrlSaveAndShow(state));
     },
     onBeatLoad(beatKey, soundList, keys, bpm) {
       const addKeysPromiseArr = [];
       if (beatKey !== "/") {
-        dispatch({ type: IS_SOUND_UPLOAD_AND_LODING, state: true });
+        dispatch(soundUploadAndLoad(true));
         database.ref(`beatSheet${beatKey}`).on('value', (snapshot) => {
           bpm.value = snapshot.val().bpm;
-          dispatch({ type: ON_NOTE_CHANGE, beat: snapshot.val().beatCopy });
-          dispatch({ type: SET_BEAT_BPM, bpm: snapshot.val().bpm });
+          dispatch(NoteChange(snapshot.val().beatCopy));
+          dispatch(beatBpmSet(snapshot.val().bpm));
           const addSoundFile = snapshot.val().beatCopy.filter(beat => {
             if (Object.keys(soundList).indexOf(Object.keys(beat)[0]) < 0) {
               return beat;
@@ -116,7 +116,7 @@ const beatupDispatchProps = (dispatch, ownProps) => {
               database.ref(`upload/${Object.keys(addSoundFile[i])}`).on('value', (snapshot) => {
                 const addSoundFile = snapshot.val();
                 resolve(addSoundFile);
-                dispatch({ type: ADD_SOUND_LIST, addSoundFile });
+                dispatch(soundListAdd(addSoundFile));
               });
             });
           }
@@ -133,7 +133,7 @@ const beatupDispatchProps = (dispatch, ownProps) => {
 
               Promise.all(addKeysPromiseArr)
                 .then((result) => {
-                  dispatch({ type: IS_SOUND_UPLOAD_AND_LODING, state: false });
+                  dispatch(soundUploadAndLoad(false));
                 })
                 .catch((err) => {
                   console.log(err);

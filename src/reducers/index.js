@@ -1,27 +1,26 @@
-// import sounds from '../source/NoteSource';
 import {
-  SET_NOTE_INDEX,
-  ON_NOTE_CHANGE,
-  SET_BEAT_BPM,
-  ON_BEAT_INIT,
-  ON_BEAT_STATE,
-  ON_BEAT_LIST_SHOW,
-  ON_SELECT_BEAT_LINE,
-  ON_CHANGE_BEAT_LINE,
-  ADD_BEAT_SOUND_FILE,
-  ADD_SOUND_LIST,
-  IS_SOUND_UPLOAD_AND_LODING,
-  ADD_BEAT_LINE,
-  REMOVE_BEAT_LINE,
-  ON_BEAT_SAVE_URL,
-  ON_BEAT_SAVE_URL_SHOW,
+  NOTE_INDEX_SET,
+  NOTE_CHANGE,
+  BEAT_BPM_SET,
+  BEAT_INITIALIZED,
+  BEAT_STATE_SET,
+  BEAT_LIST_SHOW,
+  BEAT_LINE_SELECT,
+  BEAT_LINE_CHANGE,
+  BEAT_SOUND_FILE_ADD,
+  BEAT_LINE_ADD,
+  BEAT_LINE_REMOVE,
+  BEAT_URL_SAVE,
+  BEAT_URL_SAVE_AND_SHOW,
+  SOUND_LIST_ADD,
+  SOUND_UPLOAD_AND_LOAD,
 } from '../constants/actionTypes';
 import { defaultSound } from '../source/defaultSound';
 
 const emptyNote = ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-'];
 const initEvents = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31];
 
-const initialState = {
+export const initialState = {
   bpm: 80,
   nowNoteIndex: null,
   noteNum: 32,
@@ -29,6 +28,7 @@ const initialState = {
   initBeat: emptyNote.slice(),
   initEvents: initEvents.slice(),
   beat: [
+    { snare: emptyNote.slice() },
     { kick: emptyNote.slice() },
     { bass: emptyNote.slice() },
     { oh: emptyNote.slice() },
@@ -56,20 +56,20 @@ const initialState = {
 
 function beatupReducer(state = initialState, action) {
   switch (action.type) {
-    case SET_NOTE_INDEX:
+    case NOTE_INDEX_SET:
       return Object.assign({}, state, {
         nowNoteIndex: action.noteIdx
       });
-    case ON_NOTE_CHANGE:
+    case NOTE_CHANGE:
       return Object.assign({}, state, {
         ...state,
         beat: action.beat
       });
-    case SET_BEAT_BPM:
+    case BEAT_BPM_SET:
       return Object.assign({}, state, {
         bpm: action.bpm
       });
-    case ON_BEAT_INIT:
+    case BEAT_INITIALIZED:
       let beatCopy = state.beat.slice();
       beatCopy = beatCopy.map((beat, index) => {
         return (
@@ -82,19 +82,19 @@ function beatupReducer(state = initialState, action) {
         beat: beatCopy,
         nowNoteIndex: null
       });
-    case ON_BEAT_STATE:
+    case BEAT_STATE_SET:
       return Object.assign({}, state, {
         isPlay: action.state
       });
-    case ON_BEAT_LIST_SHOW:
+    case BEAT_LIST_SHOW:
       return Object.assign({}, state, {
         isBeatListShow: action.state
       });
-    case ON_SELECT_BEAT_LINE:
+    case BEAT_LINE_SELECT:
       return Object.assign({}, state, {
         nowSelectedBeatLine: action.beat
       });
-    case ON_CHANGE_BEAT_LINE:
+    case BEAT_LINE_CHANGE:
       let beatChangeCopy = state.beat.slice();
       beatChangeCopy = beatChangeCopy.filter((beat, index) => !beat[state.nowSelectedBeatLine]);
       beatChangeCopy.push({ [action.beat]: state.initBeat.slice() });
@@ -102,24 +102,24 @@ function beatupReducer(state = initialState, action) {
         beat: beatChangeCopy,
         nowSelectedBeatLine: action.beat
       });
-    case ADD_BEAT_SOUND_FILE:
+    case BEAT_SOUND_FILE_ADD:
       return Object.assign({}, state, {
         nowSelectedUploadFile: action.file
       });
-    case ADD_SOUND_LIST:
-      let soundListCopy = {
+    case SOUND_LIST_ADD:
+      const soundListCopy = {
         ...state.soundList,
         [action.addSoundFile.beatName]: action.addSoundFile.beatUrl
       };
       return Object.assign({}, state, {
         soundList: soundListCopy
       });
-    case IS_SOUND_UPLOAD_AND_LODING:
+    case SOUND_UPLOAD_AND_LOAD:
       return Object.assign({}, state, {
         isSoundUploadAndLoding: action.state
       });
-    case ADD_BEAT_LINE:
-      let addBeat = state.beat.slice();
+    case BEAT_LINE_ADD:
+      const addBeat = state.beat.slice();
       addBeat.push({
         [`noname${Object.keys(addBeat).length}`]: state.initBeat.slice()
       })
@@ -127,18 +127,18 @@ function beatupReducer(state = initialState, action) {
         ...state,
         beat: addBeat
       });
-    case REMOVE_BEAT_LINE:
+    case BEAT_LINE_REMOVE:
       let _beatChangeCopy = state.beat.slice();
       _beatChangeCopy = _beatChangeCopy.filter((beat, index) => !beat[state.nowSelectedBeatLine]);
       return Object.assign({}, state, {
         beat: _beatChangeCopy,
         nowSelectedBeatLine: null
       });
-    case ON_BEAT_SAVE_URL:
+    case BEAT_URL_SAVE:
       return Object.assign({}, state, {
         saveUrl: action.saveUrl
       });
-    case ON_BEAT_SAVE_URL_SHOW:
+    case BEAT_URL_SAVE_AND_SHOW:
       return Object.assign({}, state, {
         saveUrlShow: action.state
       });

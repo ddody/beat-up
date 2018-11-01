@@ -2,11 +2,11 @@ import { connect } from 'react-redux';
 import SoundListComponent from '../components/SoundListComponent';
 import firebase from '../services/firebase';
 import {
-  ADD_BEAT_SOUND_FILE,
-  ADD_SOUND_LIST,
-  IS_SOUND_UPLOAD_AND_LODING,
-  ON_CHANGE_BEAT_LINE,
-} from '../constants/actionTypes';
+  beatLineChange,
+  beatSoundFileAdd,
+  soundUploadAndLoad,
+  soundListAdd
+} from '../actions'
 
 const storage = firebase.storage();
 const database = firebase.database();
@@ -16,16 +16,16 @@ const soundListStateToProps = (state) => {
     isBeatListShow: state.isBeatListShow,
     soundList: state.soundList,
   };
-}
+};
 
 const soundListDispatchProps = (dispatch) => {
   return {
     onChangeBeatLine(beat) {
-      dispatch({ type: ON_CHANGE_BEAT_LINE, beat });
+      dispatch(beatLineChange(beat));
     },
     addBeatSoundFile(file, keys) {
-      dispatch({ type: ADD_BEAT_SOUND_FILE, file });
-      dispatch({ type: IS_SOUND_UPLOAD_AND_LODING, state: true });
+      dispatch(beatSoundFileAdd(file));
+      dispatch(soundUploadAndLoad(true));
       const beatFileRef = storage.refFromURL(`gs://beat-up-b9ef1.appspot.com/upload/${file.name}`);
 
       beatFileRef.put(file)
@@ -41,9 +41,9 @@ const soundListDispatchProps = (dispatch) => {
                 .then((result) => {
                   database.ref(`upload/${file.name.split('.')[0]}`).on('value', (snapshot) => {
                     const addSoundFile = snapshot.val();
-                    dispatch({ type: ADD_SOUND_LIST, addSoundFile });
+                    dispatch(soundListAdd(addSoundFile));
                     keys.add(file.name.split('.')[0], addSoundFile.beatUrl, () => {
-                      dispatch({ type: IS_SOUND_UPLOAD_AND_LODING, state: false });
+                      dispatch(soundUploadAndLoad(false));
                     });
                   });
                 })
@@ -63,6 +63,6 @@ const soundListDispatchProps = (dispatch) => {
         });
     }
   }
-}
+};
 
 export default connect(soundListStateToProps, soundListDispatchProps)(SoundListComponent);

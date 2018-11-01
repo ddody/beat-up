@@ -34,4 +34,4 @@ render(
 
 window.onerror = (err) => {
   console.log(err);
-}
+};

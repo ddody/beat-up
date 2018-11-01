@@ -1,4 +1,9 @@
 export const defaultSound = {
+  bass: "/static/media/bass.7c207847.wav",
+  ch: "/static/media/ch.8512cd50.wav",
+  kick: "/static/media/kick.bfa138c3.wav",
+  oh: "/static/media/oh.ebf1bbf2.wav",
+  snare: "/static/media/snare.d7222426.wav",
   Ac_HatCl: "https://firebasestorage.googleapis.com/v0/b/beat-up-b9ef1.appspot.com/o/upload%2FAc_HatCl.WAV?alt=media&token=a237074b-1408-49f4-a298-c4df757081ea",
   Ac_HatOp2: "https://firebasestorage.googleapis.com/v0/b/beat-up-b9ef1.appspot.com/o/upload%2FAc_HatOp2.WAV?alt=media&token=1a47b524-f04d-455b-b089-d19e1e6b5029",
   Ac_KckCym: "https://firebasestorage.googleapis.com/v0/b/beat-up-b9ef1.appspot.com/o/upload%2FAc_KckCym.WAV?alt=media&token=2befd457-b024-49dd-8354-43b259934d7a",
@@ -97,10 +102,5 @@ export const defaultSound = {
   US_perc_22: "https://firebasestorage.googleapis.com/v0/b/beat-up-b9ef1.appspot.com/o/upload%2FUS_perc_22.WAV?alt=media&token=cb45678f-d09b-48bb-bef2-f2256ad1aa13",
   US_snare_10: "https://firebasestorage.googleapis.com/v0/b/beat-up-b9ef1.appspot.com/o/upload%2FUS_snare_10.WAV?alt=media&token=33519c37-18a1-4577-9f3d-fe19d415e728",
   US_snare_11: "https://firebasestorage.googleapis.com/v0/b/beat-up-b9ef1.appspot.com/o/upload%2FUS_snare_11.WAV?alt=media&token=1e0917f7-c196-423f-a8e9-699c818f08f5",
-  US_snare_12: "https://firebasestorage.googleapis.com/v0/b/beat-up-b9ef1.appspot.com/o/upload%2FUS_snare_12.WAV?alt=media&token=9052da79-9fb3-4ebd-ae37-02a27c362ed9",
-  bass: "/static/media/bass.7c207847.wav",
-  ch: "/static/media/ch.8512cd50.wav",
-  kick: "/static/media/kick.bfa138c3.wav",
-  oh: "/static/media/oh.ebf1bbf2.wav",
-  snare: "/static/media/snare.d7222426.wav",
+  US_snare_12: "https://firebasestorage.googleapis.com/v0/b/beat-up-b9ef1.appspot.com/o/upload%2FUS_snare_12.WAV?alt=media&token=9052da79-9fb3-4ebd-ae37-02a27c362ed9"
 }

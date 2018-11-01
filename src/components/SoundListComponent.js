@@ -34,10 +34,11 @@ class SoundListCompoennt extends Component {
                 return (
                   <li key={index}>
                     <button
+                      className="beatLineChangebutton"
                       onClick={this.props.onChangeBeatLine.bind(this, beat)}
                       data-event="selectBeat"
                     >{beat}</button>
-                    <button onClick={this.playTest.bind(this, beat)} data-event="selectBeat">Play</button>
+                    <button className="audioPlayButton" onClick={this.playTest.bind(this, beat)} data-event="selectBeat">Play</button>
                   </li>
                 );
               }

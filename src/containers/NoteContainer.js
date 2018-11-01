@@ -1,10 +1,10 @@
 import { connect } from 'react-redux';
 import NotePanelComponent from '../components/NotePanelComponent';
 import {
-  ON_NOTE_CHANGE,
-  ON_BEAT_LIST_SHOW,
-  ON_SELECT_BEAT_LINE
-} from '../constants/actionTypes';
+  NoteChange,
+  beatListShow,
+  beatLineSelect,
+} from '../actions'
 
 const beatupStateToProps = (state) => {
   return {
@@ -19,13 +19,13 @@ const beatupStateToProps = (state) => {
 const beatupDispatchProps = (dispatch) => {
   return {
     onNoteChange(beat) {
-      dispatch({ type: ON_NOTE_CHANGE, beat });
+      dispatch(NoteChange(beat));
     },
     onBeatListShow(state) {
-      dispatch({ type: ON_BEAT_LIST_SHOW, state });
+      dispatch(beatListShow(state));
     },
     onSelectBeatLine(beat) {
-      dispatch({ type: ON_SELECT_BEAT_LINE, beat });
+      dispatch(beatLineSelect(beat));
     },
   }
 }

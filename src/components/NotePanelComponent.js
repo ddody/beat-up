@@ -51,11 +51,12 @@ class NotePanelCompoenent extends Component {
             return (
               <div
                 key={index}
-                className={this.props.nowSelectedBeatLine === _beat ? `${styles.activeLine} ${styles.sample}` : styles.sample}
+                className={this.props.nowSelectedBeatLine === _beat ? `${styles.activeLine} ${styles.sample} panelWrap` : `${styles.sample} panelWrap`}
                 onMouseDown={this.onMouseDownHandler.bind(this)}
                 onMouseUp={this.onMouseUpHandler.bind(this)}
               >
                 <button
+                  className="panerSelectButton"
                   onClick={this.onSelectBeatLine.bind(this, _beat)}
                   data-event="selectBeat"
                 >{_beat}</button>

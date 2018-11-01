@@ -7,8 +7,8 @@ class NoteComponent extends Component {
     const sample = ev.target.dataset.sample.split('.');
     const sampleIndex = sample[1];
     const sampleName = sample[0];
-    let beatCopy = { ...this.props.beatCopy };
-    let sampleCopy = beatCopy[sampleName].slice();
+    const beatCopy = { ...this.props.beatCopy };
+    const sampleCopy = beatCopy[sampleName].slice();
     if (this.props.beatCopy[sampleName][sampleIndex] === 'x') {
       sampleCopy[sampleIndex] = '-';
     } else {
@@ -16,7 +16,7 @@ class NoteComponent extends Component {
     }
 
     beatCopy[sampleName] = sampleCopy;
-    let _beatCopy = this.props.beat.slice();
+    const _beatCopy = this.props.beat.slice();
     _beatCopy[this.props.nowLineIndex] = beatCopy;
     this.props.onNoteChange(_beatCopy);
   }
@@ -31,7 +31,7 @@ class NoteComponent extends Component {
     ev.preventDefault();
   }
 
-  render() { // 네모칸도 뺀다
+  render() {
     return (
       this.props.beatCopy[this.props.nowBeat].map((beat, index) => {
         return (
