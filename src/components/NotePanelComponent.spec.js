@@ -76,7 +76,7 @@ describe('note panel component', () => {
         tagName: 'DIV'
       }
     };
-    // 디폴드...
+    // Set the situation to onMouse: true, because test the change onMouse: false
     component.setState({ onMouse: true });
 
     component.simulate('mouseOut', mockTarget);
