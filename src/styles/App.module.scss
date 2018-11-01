@@ -453,7 +453,7 @@ header {
     ('moz', 'ms', 'webkit'));
 
     input[type='text'] {
-        width: 50%;
+        width: 70%;
         text-align: center;
         height: 4rem;
         border-radius: 2rem;
@@ -504,6 +504,13 @@ header {
             input[type='file']+label {
                 display: none;
             }
+        }
+    }
+
+    .popup {
+        input[type='text'] {
+            width: 80%;
+            font-size: 1rem;
         }
     }
 }
@@ -613,6 +620,17 @@ header {
                     }
                 }
             }
+        }
+    }
+
+    .popup {
+        input[type='text'] {
+            width: 90%;
+            font-size: 0.9rem;
+        }
+
+        button {
+            width: 70%;
         }
     }
 }
