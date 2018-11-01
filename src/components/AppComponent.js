@@ -1,15 +1,15 @@
 import React, { Component, Fragment } from 'react';
-import { Route } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import MainContainer from '../containers/MainContainer';
 
 class App extends Component {
 
   render() {
     return (
-      <Fragment>
+      <Switch>
         <Route path="/" exact render={(props) => <MainContainer />} />
-        <Route path={`${process.env.PUBLIC_URL}/:id`} exact render={(props) => <MainContainer />} />
-      </Fragment>
+        <Route path="/:id" exact render={(props) => <MainContainer />} />
+      </Switch>
     );
   }
 }

@@ -8,7 +8,7 @@ import SoundListContainer from '../containers/SoundListContainer';
 class MainComponent extends Component {
   constructor(props) {
     super(props);
-    console.log(process.env.PUBLIC_URL);
+
     StartAudioContext(Tone.context);
 
     const playerSetting = {
