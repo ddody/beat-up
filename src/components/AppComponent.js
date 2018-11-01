@@ -1,16 +1,15 @@
 import React, { Component, Fragment } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, HashRouter } from 'react-router-dom';
 import MainContainer from '../containers/MainContainer';
 
 class App extends Component {
 
   render() {
-    console.log(this.props);
     return (
-      <Switch>
+      <Fragment>
         <Route path="/" exact render={(props) => <MainContainer />} />
         <Route path="/:id" exact render={(props) => <MainContainer />} />
-      </Switch>
+      </Fragment>
     );
   }
 }

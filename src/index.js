@@ -1,15 +1,15 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { HashRouter, BrowserRouter as Router } from 'react-router-dom';
 import { createStore, applyMiddleware, compose } from 'redux';
 import { Provider } from 'react-redux';
 import { connectRouter, routerMiddleware, ConnectedRouter } from 'connected-react-router';
-import { createBrowserHistory } from 'history'
+import { createHashHistory } from 'history'
 import reducer from './reducers';
 import logger from 'redux-logger'
 import AppComponent from './components/AppComponent';
 
-const history = createBrowserHistory();
+const history = createHashHistory();
 
 const store = createStore(
   connectRouter(history)(reducer),
@@ -22,13 +22,13 @@ const store = createStore(
 );
 
 render(
-  <Router>
-    <Provider store={store}>
-      <ConnectedRouter history={history} >
-        <AppComponent history={history} />
-      </ConnectedRouter>
-    </Provider>
-  </Router>,
+
+  <Provider store={store}>
+    <ConnectedRouter history={history} >
+      <AppComponent history={history} />
+    </ConnectedRouter>
+  </Provider>,
+
   document.getElementById('root')
 );
 
