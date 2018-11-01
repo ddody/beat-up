@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Chakra+Petch');
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -39,6 +40,7 @@ $s-min: 20;
 $s-max: 70;
 $l-min: 30;
 $l-max: 90;
+
 @mixin clearfix {
     &::after {
         clear: both;
@@ -64,6 +66,7 @@ $prefixes: ()) {
     @each $prefix in $prefixes {
         -#{$prefix}-#{$property}: $value;
     }
+
     #{$property}: $value;
 }
 
@@ -75,6 +78,7 @@ $height: $width) {
 
 @mixin note-active($color) {
     background-color: $color;
+
     &.on {
         background-color: darken($color, 20%);
     }
@@ -91,10 +95,13 @@ $height: $width) {
 header {
     border-top: 1px solid #3b20b1;
     background-color: #eaeaea;
+
     .headerWrap {
-        width: 1200px;
+        max-width: 1200px;
+        width: 100%;
         margin: 0 auto;
         padding: 0 20px;
+
         h1 {
             height: 80px;
             line-height: 80px;
@@ -110,10 +117,12 @@ header {
     ('moz', 'ms', 'webkit'));
     border-radius: 3px;
     background-color: #464646;
+
     &:nth-child(4n - 3) {
         background-color: #616161;
         border-right: 2px solid #70f081;
     }
+
     &.active {
         &.on {
             @include prefix(transform,
@@ -121,6 +130,7 @@ header {
             ('moz', 'ms', 'webkit'));
         }
     }
+
     &.on {
         background-color: rgba(112, 240, 129, 0.6);
     }
@@ -128,12 +138,14 @@ header {
 
 .statusBar {
     background-color: #70f081;
+
     .menuWrap {
         display: flex;
         max-width: 1200px;
         margin: 0 auto;
         width: 100%;
         justify-content: flex-end;
+
         button {
             @include prefix(transition,
             200ms,
@@ -144,6 +156,7 @@ header {
             color: #70f081;
             border-left: 2px solid #70f081;
             font-weight: 600;
+
             &:hover {
                 color: #000;
                 background-color: #70f081;
@@ -155,9 +168,11 @@ header {
 .playerWrap {
     background-color: #000;
     padding: 35px 20px;
+
     .player {
         max-width: 1200px;
         margin: 0 auto;
+
         @for $i from 1 through 30 {
             .sample:nth-child(#{$i}) {
                 ul {
@@ -167,9 +182,11 @@ header {
                 }
             }
         }
+
         .sample {
             display: flex;
             @include clearfix;
+
             button {
                 width: 5rem;
                 height: 2rem;
@@ -182,35 +199,42 @@ header {
                 padding: 0 4px;
                 font-size: 0.85rem;
             }
+
             ul {
                 @include clearfix;
                 display: flex;
                 flex: 1;
+
                 li {
                     margin: 0 1px 1px;
                     flex: 1;
                     height: 2rem;
                 }
+
                 &.kick {
                     li.active {
                         @include note-active($note-green);
                     }
                 }
+
                 &.bass {
                     li.active {
                         @include note-active($note-orange);
                     }
                 }
+
                 &.oh {
                     li.active {
                         @include note-active($note-pulple);
                     }
                 }
+
                 &.ch {
                     li.active {
                         @include note-active($note-red);
                     }
                 }
+
                 &.snare {
                     li.active {
                         @include note-active($note-skyblue);
@@ -218,15 +242,18 @@ header {
                 }
             }
         }
+
         .activeLine {
             button {
                 background-color: #70f081;
                 color: #3b20b1;
                 font-weight: 600;
             }
+
             li {
                 border-top: 2px solid #74ff86;
                 border-bottom: 2px solid #74ff86;
+
                 &.on {
                     background-color: rgba(112, 240, 129, 0.6);
                 }
@@ -238,11 +265,13 @@ header {
 .listControlWrap {
     background-color: #2f2f2f;
     padding: 15px 20px;
+
     .listControl {
         max-width: 1200px;
         width: 100%;
         display: flex;
         margin: 0 auto;
+
         button {
             background-color: #70f081;
             color: #3b20b1;
@@ -252,18 +281,22 @@ header {
             border-radius: 5px;
             font-weight: 600;
         }
+
         .bpmWrap {
             flex: 1;
             display: flex;
             text-align: right;
             padding-top: 4px;
+
             .bpmTextWarp {
                 flex: 1;
                 color: #fff;
             }
+
             .controlBar {
                 flex: 3;
                 padding: 0 10px;
+
                 input {
                     width: 100%;
                 }
@@ -276,6 +309,7 @@ header {
     display: flex;
     background-color: #000;
     padding: 35px 20px 50px;
+
     .listControl {
         button {
             width: 5rem;
@@ -288,6 +322,7 @@ header {
             color: #fff;
         }
     }
+
     .beatList {
         min-height: 10rem;
         width: 100%;
@@ -296,9 +331,11 @@ header {
         border: 1px solid #3b20b1;
         border-radius: 5px;
         background-color: #eaeaea;
+
         input[type='file'] {
             @include blind;
         }
+
         input[type='file']+label {
             display: block;
             background-color: #3b20b1;
@@ -306,8 +343,10 @@ header {
             padding: 0.5em;
             cursor: pointer;
         }
+
         ul {
             padding: 10px;
+
             li {
                 @include clearfix();
                 display: inline-block;
@@ -318,6 +357,7 @@ header {
                 margin: 10px 10px 0;
                 font-size: 0;
                 overflow: hidden;
+
                 button {
                     float: left;
                     padding: 10px 5px 10px 12px;
@@ -325,6 +365,7 @@ header {
                     text-align: left;
                     color: #3b20b1;
                     font-weight: 600;
+
                     &:last-child {
                         color: #fff;
                         border-left: 1px solid #3b20b1;
@@ -354,6 +395,7 @@ header {
     @include prefix(transition,
     200ms,
     ('moz', 'ms', 'webkit'));
+
     input[type='text'] {
         width: 50%;
         text-align: center;
@@ -363,6 +405,7 @@ header {
         border: 2px solid #3b20b1;
         font-size: 1.5rem;
     }
+
     button {
         width: 5rem;
         height: 2.4rem;
