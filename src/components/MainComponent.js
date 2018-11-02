@@ -160,7 +160,7 @@ class MainComponent extends Component {
         <div className={styles.App} onClick={this.onClickEventCancel.bind(this)}>
           <header>
             <div className={styles.headerWrap}>
-              <h1>Beat Up</h1>
+              <h1>We Beat!!</h1>
             </div>
           </header>
           <div className={styles.statusBar}>
