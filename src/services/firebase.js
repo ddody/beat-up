@@ -1,12 +1,12 @@
 import firebase from 'firebase';
 
 var config = {
-  apiKey: "AIzaSyDYXN1aQs0HJ64BG43euVe19At6EW3m2D4",
-  authDomain: "beat-up-b9ef1.firebaseapp.com",
-  databaseURL: "https://beat-up-b9ef1.firebaseio.com",
-  projectId: "beat-up-b9ef1",
-  storageBucket: "beat-up-b9ef1.appspot.com",
-  messagingSenderId: "556168814610"
+  apiKey: "AIzaSyDZ_UQAjiS_iD-1z13eUc-EFzJWkX2iEo8",
+  authDomain: "we-beat.firebaseapp.com",
+  databaseURL: "https://we-beat.firebaseio.com",
+  projectId: "we-beat",
+  storageBucket: "we-beat.appspot.com",
+  messagingSenderId: "11320516149"
 };
 firebase.initializeApp(config);
 

@@ -115,7 +115,7 @@ header {
     @include prefix(transition,
     200ms,
     ('moz', 'ms', 'webkit'));
-    border-radius: 3px;
+    border-radius: 2px;
     background-color: #464646;
 
     &:nth-child(4n - 3) {
@@ -192,7 +192,7 @@ header {
                 height: 2rem;
                 display: block;
                 margin-bottom: 1px;
-                border-radius: 3px;
+                border-radius: 2px;
                 background-color: #3b20b1;
                 border: 0;
                 color: #fff;
@@ -211,7 +211,7 @@ header {
                 flex: 1;
 
                 li {
-                    margin: 0 1px 1px;
+                    margin: 0 0.5px 0.5px;
                     flex: 1;
                     height: 2rem;
                 }
@@ -295,12 +295,12 @@ header {
                     200ms,
                     ('moz', 'ms', 'webkit'));
                     text-align: center;
-                    margin: 0 1px 1px;
+                    margin: 0 0.5px 0.5px;
                     flex: 1 1;
                     height: 1.5rem;
                     line-height: 1.5rem;
                     background-color: #2f2f2f;
-                    border-radius: 3px;
+                    border-radius: 2px;
                     color: #70f081;
                     font-size: 0.7rem;
 
@@ -380,13 +380,13 @@ header {
     }
 
     .beatList {
-        min-height: 10rem;
         width: 100%;
         max-width: 1200px;
         margin: 0 auto;
         border: 1px solid #3b20b1;
         border-radius: 5px;
         background-color: #eaeaea;
+        padding-bottom: 10px;
 
         input[type='file'] {
             @include blind;

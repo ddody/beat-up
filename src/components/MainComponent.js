@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import Tone from 'tone';
+import { Link } from 'react-router-dom';
 import styles from '../styles/App.module.scss';
 import StartAudioContext from 'startaudiocontext';
 import NoteContainer from '../containers/NoteContainer';
@@ -41,7 +42,8 @@ class MainComponent extends Component {
       this.props.router.location.pathname,
       this.props.soundList,
       this.keys,
-      Tone.Transport.bpm
+      Tone.Transport.bpm,
+      this.props.beat,
     );
   }
 
@@ -98,6 +100,59 @@ class MainComponent extends Component {
     document.execCommand("copy");
   }
 
+  onBeatClear() {
+    const beatCopy = [
+      {
+        noname0: []
+      }
+    ];
+    this.props.onNoteChange(beatCopy);
+    this.onStop();
+  }
+
+  onSet(set) {
+    const beatSet = {
+      set1: [
+        { DD_Kick13: ["x", "-", "-", "-", "-", "-", "x", "-", "-", "-", "-", "-", "x", "-", "-", "-", "x", "-", "-", "-", "-", "-", "x", "-", "-", "-", "-", "-", "-", "-", "-", "-"] },
+        { US_snare_10: ["-", "-", "-", "-", "-", "-", "-", "-", "x", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "x", "-", "-", "-", "-", "-", "-", "-"] },
+        { snare: ["-", "-", "x", "-", "x", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "x", "-", "x", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"] },
+        { DD_Hat23: ["-", "-", "-", "x", "-", "x", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "x", "-", "x", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"] },
+        { US_perc_19: ["-", "-", "-", "-", "-", "-", "-", "x", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "x", "-", "-", "-", "-", "-", "-", "-", "-"] }
+      ],
+      set2: [
+        { US_kick_12: ["-", "-", "-", "-", "-", "-", "-", "-", "x", "-", "-", "-", "-", "-", "x", "-", "-", "-", "x", "-", "-", "-", "-", "-", "x", "-", "-", "-", "-", "-", "-", "-"] },
+        { US_hat_13: ["-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "x", "-", "-", "-", "-", "-", "-", "-", "x", "-", "-", "-"] },
+        { DD_Hat23: ["x", "-", "x", "-", "x", "-", "x", "-", "x", "-", "x", "-", "x", "-", "-", "-", "x", "-", "x", "-", "-", "-", "x", "-", "x", "-", "x", "-", "-", "-", "x", "-"] },
+        { US_kick_10: ["x", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "x", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"] }
+      ],
+      set3: [
+        { Ac_Kick3: ["x", "-", "-", "-", "-", "-", "x", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "x", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"] },
+        { US_snare_10: ["-", "-", "-", "-", "-", "-", "-", "-", "x", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "x", "-", "-", "-", "-", "-", "-", "-"] },
+        { DD_Hat10: ["x", "-", "-", "x", "-", "-", "x", "-", "x", "-", "-", "x", "-", "-", "x", "-", "x", "-", "-", "x", "-", "-", "x", "-", "x", "-", "-", "x", "-", "-", "x", "-"] },
+        { US_hat_13: ["-", "-", "-", "-", "x", "-", "-", "-", "-", "-", "-", "-", "x", "-", "-", "-", "-", "-", "-", "-", "x", "-", "-", "-", "-", "-", "-", "-", "x", "-", "-", "-"] },
+        { DD_PercFX3: ["-", "-", "-", "x", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "x", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "x"] },
+      ],
+      set4: [
+        { Ac_Kick3: ["x", "-", "-", "-", "-", "-", "x", "-", "x", "-", "-", "-", "-", "-", "-", "-", "x", "-", "-", "-", "-", "-", "x", "-", "x", "-", "x", "-", "-", "-", "-", "-"] },
+        { US_snare_10: ["-", "-", "-", "-", "x", "-", "-", "-", "-", "-", "-", "-", "x", "-", "-", "-", "-", "-", "-", "-", "x", "-", "-", "-", "-", "-", "-", "-", "x", "-", "-", "-"] },
+        { US_hat_09: ["-", "-", "x", "-", "-", "-", "x", "-", "-", "-", "x", "-", "-", "-", "x", "-", "-", "-", "x", "-", "-", "-", "x", "-", "-", "-", "x", "-", "-", "-", "-", "-"] },
+        { Js_Cym_5: ["x", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"] },
+        { Js_FTom_1: ["-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "x", "-"] },
+        { DD_Clap26: ["-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "x", "-", "-", "-"] }
+      ]
+    };
+
+    const bpmSet = {
+      set1: 146,
+      set2: 189,
+      set3: 130
+    };
+
+    Tone.Transport.bpm.value = +bpmSet[set];
+    this.props.setBeatBpm(bpmSet[set]);
+    this.props.onNoteChange(beatSet[set]);
+  }
+
   render() {
     return (
       <Fragment>
@@ -109,10 +164,15 @@ class MainComponent extends Component {
           </header>
           <div className={styles.statusBar}>
             <div className={styles.menuWrap}>
+              <button onClick={this.onSet.bind(this, 'set1')}>Set1</button>
+              <button onClick={this.onSet.bind(this, 'set2')}>Set2</button>
+              <button onClick={this.onSet.bind(this, 'set3')}>Set3</button>
+              <button onClick={this.onSet.bind(this, 'set4')}>Set4</button>
               <button id="start" onClick={this.onPlay.bind(this)}>Play</button>
               <button onClick={this.onPause.bind(this)}>Pause</button>
               <button onClick={this.onStop.bind(this)}>Stop</button>
               <button onClick={this.onBeatSave.bind(this)}>Save</button>
+              <button onClick={this.onBeatClear.bind(this)}>Clear</button>
             </div>
           </div>
           <div className={styles.playerWrap}>

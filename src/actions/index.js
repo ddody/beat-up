@@ -14,7 +14,8 @@ import {
   BEAT_LINE_CHANGE,
   SOUND_LIST_ADD,
   SOUND_UPLOAD_AND_LOAD,
-  BEAT_MUTE
+  BEAT_MUTE,
+  SOUND_LIST_LOAD
 } from '../constants/actionTypes';
 
 export const noteIndexSet = (noteIdx) => {
@@ -79,4 +80,8 @@ export const beatLineChange = (beat) => {
 
 export const beatMute = (beat) => {
   return { type: BEAT_MUTE, beat }
-}
+};
+
+export const soundListLoad = (list) => {
+  return { type: SOUND_LIST_LOAD, list }
+};

@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import AppComponent from '../components/MainComponent';
 import firebase from '../services/firebase';
+import axios from 'axios';
 import {
   noteIndexSet,
   noteChange,
@@ -14,7 +15,8 @@ import {
   beatLineRemove,
   beatUrlSave,
   beatUrlSaveAndShow,
-  soundUploadAndLoad
+  soundUploadAndLoad,
+  soundListLoad
 } from '../actions';
 
 const database = firebase.database();
@@ -36,7 +38,7 @@ const beatupStateToProps = (state) => {
     saveUrlShow: state.saveUrlShow,
     router: state.router,
     muteBeat: state.muteBeat,
-    maxLine: state.maxLine
+    maxLine: state.maxLine,
   };
 };
 
@@ -99,7 +101,7 @@ const beatupDispatchProps = (dispatch, ownProps) => {
     onBeatSaveShow(state) {
       dispatch(beatUrlSaveAndShow(state));
     },
-    onBeatLoad(beatKey, soundList, keys, bpm) {
+    onBeatLoad(beatKey, soundList, keys, bpm, beats) {
       const addKeysPromiseArr = [];
       if (beatKey !== "/") {
         dispatch(soundUploadAndLoad(true));
@@ -120,8 +122,19 @@ const beatupDispatchProps = (dispatch, ownProps) => {
               addSoundFilePromiseArr[i] = new Promise((resolve, reject) => {
                 database.ref(`upload/${Object.keys(addSoundFile[i])}`).on('value', (snapshot) => {
                   const addSoundFile = snapshot.val();
-                  resolve(addSoundFile);
-                  dispatch(soundListAdd(addSoundFile));
+                  axios({
+                    method: 'get',
+                    url: addSoundFile.beatUrl,
+                    responseType: 'blob'
+                  })
+                    .then((result) => {
+                      const reader = new window.FileReader();
+                      reader.readAsDataURL(result.data);
+                      reader.onload = () => {
+                        resolve({ beatName: addSoundFile.beatName, beatUrl: reader.result });
+                        dispatch(soundListAdd({ beatName: addSoundFile.beatName, beatUrl: reader.result }));
+                      }
+                    });
                 });
               });
             }
@@ -151,7 +164,97 @@ const beatupDispatchProps = (dispatch, ownProps) => {
             ownProps.history.push('/');
           }
         });
+      } else {
+        const _addSoundFilePromiseArr = [];
+        for (let i = 0; i < Object.keys(soundList).length; i++) {
+          _addSoundFilePromiseArr[i] = new Promise((resolve, reject) => {
+            database.ref(`upload/${Object.keys(soundList)[i]}`).on('value', (snapshot) => {
+              const addSoundFile = snapshot.val();
+              axios({
+                method: 'get',
+                url: addSoundFile.beatUrl,
+                responseType: 'blob'
+              })
+                .then((result) => {
+                  const reader = new window.FileReader();
+                  reader.readAsDataURL(result.data);
+                  reader.onload = () => {
+                    resolve({ beatName: addSoundFile.beatName, beatUrl: reader.result });
+                    dispatch(soundListAdd({ beatName: addSoundFile.beatName, beatUrl: reader.result }));
+                  }
+                });
+            });
+          });
+        }
+
+        Promise.all(_addSoundFilePromiseArr)
+          .then((result) => {
+            for (let i = 0; i < result.length; i++) {
+              addKeysPromiseArr[i] = new Promise((resolve, reject) => {
+                keys.add(result[i].beatName, result[i].beatUrl, () => {
+                  resolve(i);
+                });
+              });
+            }
+
+            Promise.all(addKeysPromiseArr)
+              .then((result) => {
+                dispatch(soundUploadAndLoad(false));
+                const addSoundFilePromiseArr = [];
+                for (let i = 0; i < beats.length; i++) {
+                  addSoundFilePromiseArr[i] = new Promise((resolve, reject) => {
+                    database.ref(`upload/${Object.keys(beats[i])}`).on('value', (snapshot) => {
+                      const addSoundFile = snapshot.val();
+                      axios({
+                        method: 'get',
+                        url: addSoundFile.beatUrl,
+                        responseType: 'blob'
+                      })
+                        .then((result) => {
+                          const reader = new window.FileReader();
+                          reader.readAsDataURL(result.data);
+                          reader.onload = () => {
+                            resolve({ beatName: addSoundFile.beatName, beatUrl: reader.result });
+                            dispatch(soundListAdd({ beatName: addSoundFile.beatName, beatUrl: reader.result }));
+                          }
+                        });
+                    });
+                  });
+                }
+
+                Promise.all(addSoundFilePromiseArr)
+                  .then((result) => {
+                    for (let i = 0; i < result.length; i++) {
+                      addKeysPromiseArr[i] = new Promise((resolve, reject) => {
+                        keys.add(result[i].beatName, result[i].beatUrl, () => {
+                          resolve(i);
+                        });
+                      });
+                    }
+
+                    Promise.all(addKeysPromiseArr)
+                      .then((result) => {
+                        dispatch(soundUploadAndLoad(false));
+                      })
+                      .catch((err) => {
+                        console.log(err);
+                      });
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                  })
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       }
+    },
+    onSoundListLoad(list) {
+      dispatch(soundListLoad(list));
     }
   };
 };

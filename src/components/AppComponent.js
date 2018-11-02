@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Route, HashRouter } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import MainContainer from '../containers/MainContainer';
 
 class App extends Component {

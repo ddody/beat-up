@@ -14,8 +14,10 @@ import {
   BEAT_URL_SAVE_AND_SHOW,
   SOUND_LIST_ADD,
   SOUND_UPLOAD_AND_LOAD,
-  BEAT_MUTE
+  BEAT_MUTE,
+  SOUND_LIST_LOAD
 } from '../constants/actionTypes';
+// import soundAsyncAll from '../source/defaultSound_s3';
 import { defaultSound } from '../source/defaultSound';
 
 const emptyNote = ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-'];
@@ -106,6 +108,7 @@ function beatupReducer(state = initialState, action) {
         nowSelectedUploadFile: action.file
       });
     case SOUND_LIST_ADD:
+      console.log(action);
       const soundListCopy = {
         ...state.soundList,
         [action.addSoundFile.beatName]: action.addSoundFile.beatUrl
@@ -151,6 +154,13 @@ function beatupReducer(state = initialState, action) {
 
       return Object.assign({}, state, {
         muteBeat: muteBeatCopy
+      });
+    case SOUND_LIST_LOAD:
+      console.log(action.list);
+      let soundListLoadCopy = { ...state.soundList };
+      soundListLoadCopy = action.list;
+      return Object.assign({}, state, {
+        soundList: soundListLoadCopy
       });
     default:
       return Object.assign({}, state);

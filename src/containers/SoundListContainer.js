@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import SoundListComponent from '../components/SoundListComponent';
 import firebase from '../services/firebase';
+import axios from 'axios';
 import {
   beatLineChange,
   beatSoundFileAdd,
@@ -26,14 +27,15 @@ const soundListDispatchProps = (dispatch) => {
     addBeatSoundFile(file, keys) {
       dispatch(beatSoundFileAdd(file));
       dispatch(soundUploadAndLoad(true));
-      const beatFileRef = storage.refFromURL(`gs://beat-up-b9ef1.appspot.com/upload/${file.name}`);
-
+      const beatFileRef = storage.refFromURL(`gs://we-beat.appspot.com/upload/${file.name}`);
+      // const beatFileRef = storage.refFromURL(`gs://beat-up-b9ef1.appspot.com/upload/${file.name}`);
       beatFileRef.put(file)
         .then((result) => {
           return result
         }).then((result) => {
           beatFileRef.getDownloadURL()
             .then((result) => {
+              console.log(result);
               database.ref(`upload/${file.name.split('.')[0]}`).set({
                 beatName: file.name.split('.')[0],
                 beatUrl: result
@@ -41,10 +43,21 @@ const soundListDispatchProps = (dispatch) => {
                 .then((result) => {
                   database.ref(`upload/${file.name.split('.')[0]}`).on('value', (snapshot) => {
                     const addSoundFile = snapshot.val();
-                    dispatch(soundListAdd(addSoundFile));
-                    keys.add(file.name.split('.')[0], addSoundFile.beatUrl, () => {
-                      dispatch(soundUploadAndLoad(false));
-                    });
+                    axios({
+                      method: 'get',
+                      url: addSoundFile.beatUrl,
+                      responseType: 'blob'
+                    })
+                      .then((result) => {
+                        const reader = new window.FileReader();
+                        reader.readAsDataURL(result.data);
+                        reader.onload = () => {
+                          keys.add(file.name.split('.')[0], addSoundFile.beatUrl, () => {
+                            dispatch(soundUploadAndLoad(false));
+                          });
+                          dispatch(soundListAdd({ beatName: addSoundFile.beatName, beatUrl: reader.result }));
+                        }
+                      });
                   });
                 })
                 .catch(err => {
