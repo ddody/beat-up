@@ -145,7 +145,8 @@ class MainComponent extends Component {
     const bpmSet = {
       set1: 146,
       set2: 189,
-      set3: 130
+      set3: 130,
+      set4: 128
     };
 
     Tone.Transport.bpm.value = +bpmSet[set];

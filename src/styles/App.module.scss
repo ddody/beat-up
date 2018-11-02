@@ -177,7 +177,7 @@ header {
             .sample:nth-child(#{$i}) {
                 ul {
                     li.active {
-                        background-color: lighten(hsl(random(360), $s-min+random($s-max+-$s-min), $l-min+random($l-max+-$l-min)), 11%);
+                        background-color: lighten(hsl(random(360), $s-min+random($s-max+-$s-min), $l-min+random($l-max+-$l-min)), 5%);
                     }
                 }
             }
