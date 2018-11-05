@@ -27,15 +27,11 @@ const soundListDispatchProps = (dispatch) => {
     addBeatSoundFile(file, keys) {
       dispatch(beatSoundFileAdd(file));
       dispatch(soundUploadAndLoad(true));
-      const beatFileRef = storage.refFromURL(`gs://we-beat.appspot.com/upload/${file.name}`);
-      // const beatFileRef = storage.refFromURL(`gs://beat-up-b9ef1.appspot.com/upload/${file.name}`);
+      const beatFileRef = storage.ref().child('/upload');
       beatFileRef.put(file)
         .then((result) => {
-          return result
-        }).then((result) => {
           beatFileRef.getDownloadURL()
             .then((result) => {
-              console.log(result);
               database.ref(`upload/${file.name.split('.')[0]}`).set({
                 beatName: file.name.split('.')[0],
                 beatUrl: result

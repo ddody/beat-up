@@ -10,7 +10,6 @@ import logger from 'redux-logger'
 import AppComponent from './components/AppComponent';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faVolumeUp, faVolumeOff } from '@fortawesome/free-solid-svg-icons';
-// import { faHeart as farHeart } from '@fortawesome/free-regular-svg-icons';
 
 library.add(faVolumeUp, faVolumeOff);
 
