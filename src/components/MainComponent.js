@@ -5,6 +5,7 @@ import styles from '../styles/App.module.scss';
 import StartAudioContext from 'startaudiocontext';
 import NoteContainer from '../containers/NoteContainer';
 import SoundListContainer from '../containers/SoundListContainer';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 class MainComponent extends Component {
   constructor(props) {
@@ -157,6 +158,17 @@ class MainComponent extends Component {
   render() {
     return (
       <Fragment>
+        {
+          this.props.isSoundUploadAndLoding &&
+          <div className={styles.beatLoading}>
+            <FontAwesomeIcon
+              icon={['fa', 'spinner']}
+              style={{ color: '#fff' }}
+              spin
+              size='4x'
+            />
+          </div>
+        }
         <div className={styles.App} onClick={this.onClickEventCancel.bind(this)}>
           <header>
             <div className={styles.headerWrap}>

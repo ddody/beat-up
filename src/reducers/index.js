@@ -108,7 +108,6 @@ function beatupReducer(state = initialState, action) {
         nowSelectedUploadFile: action.file
       });
     case SOUND_LIST_ADD:
-      console.log(action);
       const soundListCopy = {
         ...state.soundList,
         [action.addSoundFile.beatName]: action.addSoundFile.beatUrl
@@ -156,7 +155,6 @@ function beatupReducer(state = initialState, action) {
         muteBeat: muteBeatCopy
       });
     case SOUND_LIST_LOAD:
-      console.log(action.list);
       let soundListLoadCopy = { ...state.soundList };
       soundListLoadCopy = action.list;
       return Object.assign({}, state, {
