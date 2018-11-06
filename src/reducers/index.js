@@ -17,7 +17,6 @@ import {
   BEAT_MUTE,
   SOUND_LIST_LOAD
 } from '../constants/actionTypes';
-// import soundAsyncAll from '../source/defaultSound_s3';
 import { defaultSound } from '../source/defaultSound';
 
 const emptyNote = ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-'];
@@ -35,13 +34,7 @@ export const initialState = {
     { kick: emptyNote.slice() },
     { bass: emptyNote.slice() },
     { ch: emptyNote.slice() },
-    { Ac_HatCl: emptyNote.slice() },
-    { Ac_HatOp2: emptyNote.slice() },
-    { Ac_KckCym: emptyNote.slice() },
-    { Ac_Kick3: emptyNote.slice() },
-    { Ac_KiknRide: emptyNote.slice() },
-    { Ac_MidTom: emptyNote.slice() },
-    { Ac_Snare4: emptyNote.slice() }
+    { oh: emptyNote.slice() },
   ],
   isBeatListShow: false,
   nowSelectedBeatLine: null,

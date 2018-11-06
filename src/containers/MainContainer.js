@@ -111,9 +111,14 @@ const beatupDispatchProps = (dispatch, ownProps) => {
             dispatch(noteChange(snapshot.val().beatCopy));
             dispatch(beatBpmSet(snapshot.val().bpm));
             const addSoundFilePromiseArr = [];
-            for (let i = 0; i < Object.keys(soundList).length; i++) {
+            let sampler = Object.keys(soundList);
+            const _sampler = snapshot.val().beatCopy.map(beat => {
+              return Object.keys(beat)[0];
+            });
+            sampler = sampler.concat(_sampler);
+            for (let i = 0; i < sampler.length; i++) {
               addSoundFilePromiseArr[i] = new Promise((resolve, reject) => {
-                database.ref(`upload/${Object.keys(soundList)[i]}`).on('value', (snapshot) => {
+                database.ref(`upload/${sampler[i]}`).on('value', (snapshot) => {
                   const addSoundFile = snapshot.val();
                   axios({
                     method: 'get',
