@@ -53,17 +53,18 @@ class NotePanelCompoenent extends Component {
         {
           this.props.beat.map((beat, index) => {
             const _beat = Object.keys(beat)[0];
+            console.log(this.props.muteBeat);
             return (
               <div
                 key={index}
                 className={
                   this.props.nowSelectedBeatLine === _beat ?
-                    this.props.muteBeat.indexOf(_beat) > -1 ?
-                      `${styles.sample} ${styles.muteLine} panelWrap` :
-                      `${styles.activeLine} ${styles.sample} panelWrap` :
-                    this.props.muteBeat.indexOf(_beat) > -1 ?
-                      `${styles.sample} ${styles.muteLine} panelWrap` :
-                      `${styles.sample} panelWrap`
+                    this.props.muteBeat && this.props.muteBeat.indexOf(_beat) > -1 ?
+                      `panelWrap ${styles.sample} ${styles.muteLine}` :
+                      `panelWrap ${styles.activeLine} ${styles.sample}`
+                    : this.props.muteBeat && this.props.muteBeat.indexOf(_beat) > -1 ?
+                      `panelWrap ${styles.sample} ${styles.muteLine}` :
+                      `panelWrap ${styles.sample}`
                 }
                 onMouseDown={this.onMouseDownHandler.bind(this)}
                 onMouseUp={this.onMouseUpHandler.bind(this)}
@@ -73,7 +74,7 @@ class NotePanelCompoenent extends Component {
                   onClick={this.onMuteBeat.bind(this, _beat)}
                 >
                   {
-                    this.props.muteBeat.indexOf(_beat) > -1 ?
+                    this.props.muteBeat && this.props.muteBeat.indexOf(_beat) > -1 ?
                       <FontAwesomeIcon
                         icon="volume-off"
                       /> :
