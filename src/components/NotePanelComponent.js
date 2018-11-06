@@ -53,7 +53,6 @@ class NotePanelCompoenent extends Component {
         {
           this.props.beat.map((beat, index) => {
             const _beat = Object.keys(beat)[0];
-            console.log(this.props.muteBeat);
             return (
               <div
                 key={index}
