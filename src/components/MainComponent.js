@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from 'react';
 import Tone from 'tone';
-import { Link } from 'react-router-dom';
 import styles from '../styles/App.module.scss';
 import StartAudioContext from 'startaudiocontext';
 import NoteContainer from '../containers/NoteContainer';

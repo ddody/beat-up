@@ -2,7 +2,7 @@
 
 # Introduction
 
-**WE BEAT**는 평소 관심 있던 음악제작용 시퀀서(https://ko.wikipedia.org/wiki/%EC%8B%9C%ED%80%80%EC%84%9C)를 웹용으로 만든 애플리케이션입니다. \
+**WE BEAT**는 평소 관심 있던 음악제작용 [시퀀서](https://ko.wikipedia.org/wiki/%EC%8B%9C%ED%80%80%EC%84%9C)를 웹용으로 만든 애플리케이션입니다. \
 자신의 비트 파일을 올려 악보에 사용하고, 사용자가 만든 비트를 공유하거나 서로의 비트를 수정하는 기능에 집중하여 구현한 웹용 비트메이커입니다.
 
 ![ScreenShot](./webeat-thumbnail.gif)
