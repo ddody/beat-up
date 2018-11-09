@@ -7,6 +7,8 @@
 
 ![ScreenShot](./webeat-thumbnail.gif)
 
+[Youtube Link](https://www.youtube.com/watch?v=YjONTV1yyQs)
+
 ## Requirements
 
 - WEBEAT은 Chrome Browser를 권장합니다.
